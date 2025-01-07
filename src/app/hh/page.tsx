@@ -3,14 +3,12 @@
 import { Card } from "@/components/ui/card";
 import { Icons } from "@/lib/data/icons";
 import { SECTIONS_DATA } from "@/lib/data/sections";
-import Link from "next/link";
 
 interface CustomCardProps {
   icon: keyof typeof Icons;
   title: string;
   subtitle: string;
   color?: string;
-  type: string;
 }
 
 function CustomCard({
@@ -18,7 +16,6 @@ function CustomCard({
   title,
   subtitle,
   color = "blue",
-  type,
 }: CustomCardProps) {
   const gradients = {
     red: "from-red-500 to-red-600",
@@ -32,24 +29,23 @@ function CustomCard({
   };
 
   const Icon = Icons[icon];
-  return (
-    <Link href={`/chat?type=${type}`}>
-      <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
-        <div
-          className={`p-6 bg-gradient-to-br ${gradients[color as keyof typeof gradients]} text-white relative h-full`}
-        >
-          <Icon className="mb-4 text-white/90" />
 
-          <h3 className="text-xl font-bold mb-2 group-hover:translate-x-1 transition-transform">
-            {title}
-          </h3>
-          <p className="text-white/80 group-hover:translate-x-1 transition-transform">
-            {subtitle}
-          </p>
-          <Icons.arrowRight className="absolute bottom-4 right-4 w-6 h-6 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-2 transition-all duration-300" />
-        </div>
-      </Card>
-    </Link>
+  return (
+    <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
+      <div
+        className={`p-6 bg-gradient-to-br ${gradients[color as keyof typeof gradients]} text-white relative h-full`}
+      >
+        <Icon className="mb-4 text-white/90" />
+
+        <h3 className="text-xl font-bold mb-2 group-hover:translate-x-1 transition-transform">
+          {title}
+        </h3>
+        <p className="text-white/80 group-hover:translate-x-1 transition-transform">
+          {subtitle}
+        </p>
+        <Icons.arrowRight className="absolute bottom-4 right-4 w-6 h-6 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-2 transition-all duration-300" />
+      </div>
+    </Card>
   );
 }
 
@@ -188,7 +184,6 @@ export default function Page() {
                   title={card.title}
                   subtitle={card.subtitle}
                   color={card.color}
-                  type={card.type}
                 />
               ))}
             </div>
