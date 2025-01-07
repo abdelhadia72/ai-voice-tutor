@@ -1,27 +1,41 @@
 "use client";
 
-import { Home, BookOpen, Settings, X, Menu } from "lucide-react";
-
-interface Story {
-  id: number;
-  title: string;
-  description: string;
-  progress: number;
-  isActive: boolean;
-}
+import {
+  Home,
+  MessagesSquare,
+  MessageSquareDot,
+  X,
+  Menu,
+  ChevronLeft,
+} from "lucide-react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { ReactNode } from "react";
 
 interface SidebarProps {
-  stories: Story[];
+  children?: ReactNode | ReactNode[];
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function Sidebar({ stories, isOpen, onOpenChange }: SidebarProps) {
+export function Sidebar({ children, isOpen, onOpenChange }: SidebarProps) {
+  const pathname = usePathname();
+  const showBackButton = pathname !== "/";
+
   return (
     <>
+      {showBackButton && (
+        <Link
+          href="/"
+          className="fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow-sm hover:bg-gray-50"
+        >
+          <ChevronLeft className="w-6 h-6 text-gray-600" />
+        </Link>
+      )}
+
       <button
         onClick={() => onOpenChange(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-40 bg-white p-2 rounded-lg"
+        className="lg:hidden fixed top-4 left-16 z-40 bg-white p-2 rounded-lg"
       >
         {isOpen ? (
           <X className="w-6 h-6 text-gray-600" />
@@ -36,60 +50,53 @@ export function Sidebar({ stories, isOpen, onOpenChange }: SidebarProps) {
         }`}
       >
         <div className="p-6">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-bold text-gray-800">
-              Learning Journey
-            </h2>
+          {/* User Profile Section */}
+          <div className="flex items-center space-x-4 mb-8">
+            <div className="relative">
+              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <span className="text-blue-600 font-medium">AM</span>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900">Ali Mo</h3>
+              <div className="text-sm text-gray-500">Level B2</div>
+            </div>
           </div>
 
           <nav className="space-y-6">
             <div className="space-y-2">
               <div className="text-sm font-medium text-gray-500 px-3">Menu</div>
               <div className="space-y-1">
-                <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-blue-50 text-blue-600">
+                <Link
+                  href="/"
+                  className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg bg-blue-50 text-blue-600"
+                >
                   <Home className="w-5 h-5" />
                   <span>Dashboard</span>
-                </button>
-                <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50">
-                  <BookOpen className="w-5 h-5" />
-                  <span>My Stories</span>
-                </button>
-                <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50">
-                  <Settings className="w-5 h-5" />
-                  <span>Settings</span>
-                </button>
+                </Link>
+                <Link
+                  href="/chat"
+                  className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50"
+                >
+                  <MessagesSquare className="w-5 h-5" />
+                  <span>interactive chat</span>
+                </Link>
+                <Link
+                  href="/real-time?type=live"
+                  className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50"
+                >
+                  <MessageSquareDot className="w-5 h-5" />
+                  <span>live call</span>
+                </Link>
               </div>
             </div>
 
+            {/* Content Section */}
             <div className="space-y-2">
               <div className="text-sm font-medium text-gray-500 px-3">
-                Stories
+                Current Progress
               </div>
-              <div className="space-y-1">
-                {stories.map((story) => (
-                  <button
-                    key={story.id}
-                    className={`w-full px-3 py-2 rounded-lg text-left ${
-                      story.isActive
-                        ? "bg-blue-50 text-blue-600"
-                        : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium">{story.title}</span>
-                      {story.progress > 0 && (
-                        <span className="text-sm">{story.progress}%</span>
-                      )}
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1">
-                      <div
-                        className="bg-blue-500 h-1 rounded-full"
-                        style={{ width: `${story.progress}%` }}
-                      />
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <div className="space-y-1">{children}</div>
             </div>
           </nav>
         </div>
