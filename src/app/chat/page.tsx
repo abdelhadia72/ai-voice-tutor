@@ -5,7 +5,10 @@ import { Send } from "lucide-react";
 
 import { BrowserSTTService } from "@/lib/services/stt/stt-service";
 import { VoiceRecorder } from "@/components/voice/VoiceRecorder";
-import { MessageBubble } from "./MessageBubble";
+import { MessageBubble } from "@/components/custom/MessageBubble";
+
+import { useSearchParams } from "next/navigation";
+// import { CHAT_PROMPTS } from "@/config/prompts";
 
 interface Message {
   role: "user" | "model";
@@ -25,6 +28,11 @@ export default function Chat() {
   const [transcript, setTranscript] = useState("");
   const recognitionRef = useRef<any>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "medical";
+  console.log(" type is from client ", type);
+  // const selectedPrompt = CHAT_PROMPTS[type as keyof typeof CHAT_PROMPTS];
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -71,6 +79,7 @@ export default function Chat() {
         body: JSON.stringify({
           message: text,
           history: updatedMessages.map(({ parts, role }) => ({ parts, role })),
+          promptType: type,
         }),
       });
 
@@ -113,6 +122,7 @@ export default function Chat() {
         body: JSON.stringify({
           message: inputText,
           history: updatedMessages,
+          promptType: type,
         }),
       });
 

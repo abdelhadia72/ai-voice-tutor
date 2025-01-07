@@ -1,9 +1,9 @@
-import Chat from "@/components/custom/chat";
+import Dashboard from "./dashboard";
 
 export default function Home() {
   return (
     <>
-      <Chat />
+      <Dashboard />
     </>
   );
 }

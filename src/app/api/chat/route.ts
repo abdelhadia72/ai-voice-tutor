@@ -1,3 +1,4 @@
+import { CHAT_PROMPTS } from "@/config/prompts";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse, NextRequest } from "next/server";
 
@@ -26,7 +27,7 @@ interface ChatMessage {
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, history } = await req.json();
+    const { message, history, promptType } = await req.json();
 
     if (!message) {
       return NextResponse.json(
@@ -51,7 +52,11 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const prompt = `${doctorContext}\n\nPatient message: ${message}`;
+    const selectedPrompt =
+      CHAT_PROMPTS[promptType as keyof typeof CHAT_PROMPTS];
+    console.log("promp is ", selectedPrompt);
+    console.log("promp is type is  ", promptType);
+    const prompt = `${selectedPrompt.prompt}\n\nPatient message: ${message}`;
     const result = await chat.sendMessage(prompt);
     console.log("res is res", result);
     const response = result.response.text();
