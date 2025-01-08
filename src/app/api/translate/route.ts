@@ -14,7 +14,10 @@ export async function POST(req: Request) {
     
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `Translate the following English text to Arabic. Provide only the Arabic translation, nothing else:
+    const prompt = `You are a professional translator specializing in English to Arabic translation.
+Please translate the following English text to Modern Standard Arabic (MSA).
+Maintain the same tone and formality level as the original text.
+Provide ONLY the Arabic translation, no explanations or additional text:
 
 ${text}`;
 
@@ -22,7 +25,7 @@ ${text}`;
     const translation = result.response.text();
     
     return NextResponse.json({
-      translation,
+      translation: translation.trim(),
       original: text
     });
 

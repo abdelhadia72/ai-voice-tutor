@@ -31,7 +31,7 @@ export const CHAT_PROMPTS = {
     4. Provide practice
     5. Build confidence
     6. Check understanding
-    Note: Limit responses to 25 tokens.`,
+    Note: Limit responses to 25 tokens or less `,
   },
   "grammar-intermediate": {
     id: 4,

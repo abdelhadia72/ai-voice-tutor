@@ -159,16 +159,24 @@ export default function Chat() {
   };
 
   const addTranslation = (text: string, translation: string) => {
-    const newTranslation: Translation = {
-      languageFrom: "English",
-      languageTo: "Arabic",
-      text,
-      translation,
-      audioIdFrom: `english_${Date.now()}`,
-      audioIdTo: `arabic_${Date.now()}`
-    };
-    
-    setTranslations(prev => [newTranslation, ...prev]);
+    setTranslations((prev) => {
+      const exists = prev.some((t) => t.text === text);
+      if (exists) {
+        return prev;
+      }
+
+      const newTranslation: Translation = {
+        languageFrom: "English",
+        languageTo: "Arabic",
+        text,
+        translation,
+        audioIdFrom: `english_${Date.now()}`,
+        audioIdTo: `arabic_${Date.now()}`,
+      };
+
+      return [newTranslation, ...prev];
+    });
+
     setIsSidebarOpen(true);
   };
 
@@ -206,10 +214,12 @@ export default function Chat() {
           className="flex-1 overflow-y-auto px-4 py-6 space-y-6 customScrollbar"
         >
           {messages.map((msg, index) => (
-            <MessageBubble 
-              key={index} 
-              message={msg} 
-              translationContext={msg.role === "model" ? { addTranslation } : undefined}
+            <MessageBubble
+              key={index}
+              message={msg}
+              translationContext={
+                msg.role === "model" ? { addTranslation } : undefined
+              }
             />
           ))}
         </div>
