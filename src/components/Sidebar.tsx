@@ -42,7 +42,7 @@ export function Sidebar({ children }: SidebarProps) {
 
       <div
         className={cn(
-          "h-full w-[300px] bg-zinc-100 lg:static fixed inset-y-0 left-0 z-40 transition-transform duration-200 ease-in-out lg:translate-x-0",
+          "h-full w-[300px] bg-zinc-100 lg:static fixed inset-y-0 left-0 transition-transform duration-200 ease-in-out lg:translate-x-0 z-50",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
