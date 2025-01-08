@@ -16,7 +16,7 @@ export function Sidebar({ children }: SidebarProps) {
   const pathname = usePathname();
   const { isOpen, toggleSidebar, items } = useSidebarStore();
   const { name } = useUserPreferences();
-  
+
   // Get initials from name
   const initials = name
     ? name
@@ -31,7 +31,8 @@ export function Sidebar({ children }: SidebarProps) {
     <>
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 right-4 z-50 lg:hidden bg-zinc-50 p-2 rounded-lg hover:bg-zinc-100">
+        className="fixed top-4 right-4 z-50 lg:hidden bg-zinc-50 p-2 rounded-lg hover:bg-zinc-100"
+      >
         {isOpen ? (
           <X className="w-6 h-6 text-zinc-600" />
         ) : (
@@ -41,9 +42,10 @@ export function Sidebar({ children }: SidebarProps) {
 
       <div
         className={cn(
-          "h-full w-[280px] bg-zinc-50 lg:static fixed inset-y-0 left-0 z-40 transition-transform duration-200 ease-in-out lg:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        )}>
+          "h-full w-[300px] bg-zinc-50 lg:static fixed inset-y-0 left-0 z-40 transition-transform duration-200 ease-in-out lg:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-zinc-200">
             <div className="flex items-center gap-3">
@@ -61,9 +63,10 @@ export function Sidebar({ children }: SidebarProps) {
                 className={cn(
                   "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors text-sm",
                   pathname === "/"
-                    ? "bg-zinc-200 text-zinc-900"
-                    : "text-zinc-600 hover:bg-zinc-200/50"
-                )}>
+                    ? "bg-teal-600 text-zinc-50"
+                    : "text-zinc-600 hover:bg-zinc-200/50",
+                )}
+              >
                 <Home className="w-4 h-4 shrink-0" />
                 <span>Dashboard</span>
               </Link>
@@ -72,9 +75,10 @@ export function Sidebar({ children }: SidebarProps) {
                 className={cn(
                   "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors text-sm",
                   pathname === "/chat"
-                    ? "bg-zinc-200 text-zinc-900"
-                    : "text-zinc-600 hover:bg-zinc-200/50"
-                )}>
+                    ? "bg-teal-600 text-zinc-50"
+                    : "text-zinc-600 hover:bg-zinc-200/50",
+                )}
+              >
                 <MessagesSquare className="w-4 h-4 shrink-0" />
                 <span>Interactive Chat</span>
               </Link>
@@ -83,9 +87,10 @@ export function Sidebar({ children }: SidebarProps) {
                 className={cn(
                   "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors text-sm",
                   pathname === "/real-time"
-                    ? "bg-zinc-200 text-zinc-900"
-                    : "text-zinc-600 hover:bg-zinc-200/50"
-                )}>
+                    ? "bg-teal-600 text-zinc-50"
+                    : "text-zinc-600 hover:bg-zinc-200/50",
+                )}
+              >
                 <MessageSquareDot className="w-4 h-4 shrink-0" />
                 <span>Live Call</span>
               </Link>
@@ -103,9 +108,10 @@ export function Sidebar({ children }: SidebarProps) {
                     className={cn(
                       "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors text-sm",
                       pathname === item.href
-                        ? "bg-zinc-200 text-zinc-900"
-                        : "text-zinc-600 hover:bg-zinc-200/50"
-                    )}>
+                        ? "bg-teal-600 text-zinc-50"
+                        : "text-zinc-600 hover:bg-zinc-200/50",
+                    )}
+                  >
                     <span>{item.title}</span>
                   </Link>
                 ))}

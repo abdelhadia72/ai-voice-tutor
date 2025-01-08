@@ -6,7 +6,18 @@ import { SECTIONS_DATA } from "@/lib/data/sections";
 import Link from "next/link";
 import { usePaywall } from "@/hooks/use-paywall";
 import { PaywallModal } from "@/components/PaywallModal";
-import { Crown, Sparkles, Rocket, Star, Users, Timer, Mic, Globe, BookOpen, BarChart, Video, Brain, Smile, Camera, Eye, Zap } from "lucide-react";
+import {
+  Crown,
+  Sparkles,
+  Mic,
+  BookOpen,
+  Video,
+  Brain,
+  Smile,
+  Camera,
+  Eye,
+  Zap,
+} from "lucide-react";
 
 export function QuizCard({ title, score }: { title: string; score: number }) {
   return (
@@ -26,6 +37,8 @@ interface CustomCardProps {
   color?: string;
   type: string;
   isPro?: boolean;
+  aiName: string;
+  profession: string;
 }
 
 function CustomCard({
@@ -71,7 +84,9 @@ function CustomCard({
               {isPro && (
                 <div className="flex items-center gap-1 bg-yellow-500/20 px-2 py-1 rounded-full">
                   <Crown className="w-4 h-4 text-yellow-400" />
-                  <span className="text-xs font-medium text-yellow-400">PRO</span>
+                  <span className="text-xs font-medium text-yellow-400">
+                    PRO
+                  </span>
                 </div>
               )}
             </div>
@@ -114,13 +129,19 @@ export default function Dashboard() {
                         <Sparkles className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-semibold text-white">Real-time AI Chat</h3>
-                        <p className="text-blue-100 text-sm">Human-like Conversations</p>
+                        <h3 className="text-xl font-semibold text-white">
+                          Real-time AI Chat
+                        </h3>
+                        <p className="text-blue-100 text-sm">
+                          Human-like Conversations
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                       <Crown className="w-3.5 h-3.5 text-amber-300" />
-                      <span className="text-xs font-medium text-amber-300">PRO</span>
+                      <span className="text-xs font-medium text-amber-300">
+                        PRO
+                      </span>
                     </div>
                   </div>
 
@@ -144,7 +165,8 @@ export default function Dashboard() {
                   </div>
 
                   <p className="mt-4 text-sm text-blue-100/80 bg-white/5 backdrop-blur-sm p-2.5 rounded-lg">
-                    Experience natural conversations with AI that can see, hear, and respond like a real tutor
+                    Experience natural conversations with AI that can see, hear,
+                    and respond like a real tutor
                   </p>
 
                   <button className="mt-4 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
@@ -165,13 +187,19 @@ export default function Dashboard() {
                         <BookOpen className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-semibold text-white">Story Mode</h3>
-                        <p className="text-emerald-100 text-sm">Interactive Reality</p>
+                        <h3 className="text-xl font-semibold text-white">
+                          Story Mode
+                        </h3>
+                        <p className="text-emerald-100 text-sm">
+                          Interactive Reality
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                       <Crown className="w-3.5 h-3.5 text-amber-300" />
-                      <span className="text-xs font-medium text-amber-300">PRO</span>
+                      <span className="text-xs font-medium text-amber-300">
+                        PRO
+                      </span>
                     </div>
                   </div>
 
@@ -195,7 +223,8 @@ export default function Dashboard() {
                   </div>
 
                   <p className="mt-4 text-sm text-emerald-100/80 bg-white/5 backdrop-blur-sm p-2.5 rounded-lg">
-                    Use your camera and voice to interact with AI in real-world scenarios
+                    Use your camera and voice to interact with AI in real-world
+                    scenarios
                   </p>
 
                   <button className="mt-4 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
@@ -220,6 +249,8 @@ export default function Dashboard() {
                   color={level.color}
                   type={level.type}
                   isPro={level.isPro}
+                  aiName={level.aiName}
+                  profession={level.profession}
                 />
               ))}
             </div>
@@ -238,6 +269,8 @@ export default function Dashboard() {
                   color={scenario.color}
                   type={scenario.type}
                   isPro={scenario.isPro}
+                  aiName={scenario.aiName}
+                  profession={scenario.profession}
                 />
               ))}
             </div>

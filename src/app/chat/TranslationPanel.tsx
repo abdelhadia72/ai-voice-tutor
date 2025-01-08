@@ -27,7 +27,11 @@ interface AudioCache {
   [key: string]: string;
 }
 
-export default function TranslationPanel({ translations, toggle, updateToggle }: TranslationPanelProps) {
+export default function TranslationPanel({
+  translations,
+  toggle,
+  updateToggle,
+}: TranslationPanelProps) {
   const { targetLanguage, nativeLanguage } = useUserPreferences();
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -64,7 +68,7 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
         const data = await response.json();
         if (data.audioUrl) {
           audioUrl = data.audioUrl;
-          setAudioCache(prev => ({ ...prev, [id]: audioUrl }));
+          setAudioCache((prev) => ({ ...prev, [id]: audioUrl }));
         }
       }
 
@@ -75,7 +79,7 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
         } else {
           audioRef.current.src = audioUrl;
         }
-        
+
         await audioRef.current.play();
         setPlayingId(id);
       }
@@ -96,28 +100,34 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
   }, []);
 
   return (
-    <div className={`fixed lg:relative right-0 top-0 h-full bg-white border-l border-gray-200 flex flex-col w-[320px] transition-transform duration-300 ease-in-out z-40 ${
-      toggle ? "translate-x-0" : "translate-x-full lg:translate-x-0"
-    }`}>
+    <div
+      className={`fixed lg:relative right-0 top-0 h-full bg-white border-l border-gray-200 flex flex-col w-[320px] lg:w-[450px] transition-transform duration-300 ease-in-out z-40 ${
+        toggle ? "translate-x-0" : "translate-x-full lg:translate-x-0"
+      }`}
+    >
       <div className="border-b border-gray-200 p-4">
         <h2 className="text-lg font-semibold text-gray-700 flex items-center justify-between">
           <span>Translation</span>
           <span className="text-sm font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
-            {getLanguageDisplay(targetLanguage || 'en')} → {getLanguageDisplay(nativeLanguage || 'ar')}
+            {getLanguageDisplay(targetLanguage || "en")} →{" "}
+            {getLanguageDisplay(nativeLanguage || "ar")}
           </span>
         </h2>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {translations.map((item, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div
+            key={index}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+          >
             {/* Original Text */}
             <div className="p-3 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
                   <p className="text-xs font-medium text-gray-500 uppercase">
-                    {getLanguageDisplay(targetLanguage || 'en')}
+                    {getLanguageDisplay(targetLanguage || "en")}
                   </p>
                 </div>
                 <button
@@ -134,7 +144,9 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
                   )}
                 </button>
               </div>
-              <p className="font-medium text-gray-800 text-sm">{item.original}</p>
+              <p className="font-medium text-gray-800 text-sm">
+                {item.original}
+              </p>
             </div>
 
             {/* Translation */}
@@ -143,7 +155,7 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-teal-500"></div>
                   <p className="text-xs font-medium text-gray-500 uppercase">
-                    {getLanguageDisplay(nativeLanguage || 'ar')}
+                    {getLanguageDisplay(nativeLanguage || "ar")}
                   </p>
                 </div>
                 <button
@@ -160,7 +172,10 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
                   )}
                 </button>
               </div>
-              <p className="font-medium text-gray-800 text-sm" dir={nativeLanguage === 'ar' ? 'rtl' : 'ltr'}>
+              <p
+                className="font-medium text-gray-800 text-sm"
+                dir={nativeLanguage === "ar" ? "rtl" : "ltr"}
+              >
                 {item.translation}
               </p>
             </div>

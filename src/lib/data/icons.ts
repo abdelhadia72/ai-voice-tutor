@@ -22,6 +22,12 @@ import {
   CircleDot,
   CircleDotDashed,
   CircleEqual,
+  Stethoscope,
+  Pill,
+  AlertCircle,
+  Smile,
+  Heart,
+  Activity,
 } from "lucide-react";
 
 export const Icons = {
@@ -48,4 +54,10 @@ export const Icons = {
   bookLearn: BookText,
   bookComplete: BookCheck,
   bookSaved: BookMarked,
+  medical: Stethoscope,
+  pharmacy: Pill,
+  emergency: AlertCircle,
+  dental: Smile,
+  mentalHealth: Heart,
+  physicalTherapy: Activity,
 } as const;

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Send, Languages } from "lucide-react";
-
+import { SECTIONS_DATA } from "@/lib/data/sections";
 import { BrowserSTTService } from "@/lib/services/stt/stt-service";
 import { VoiceRecorder } from "@/components/voice/VoiceRecorder";
 import { MessageBubble } from "@/components/custom/MessageBubble";
@@ -24,6 +24,36 @@ interface Translation {
 const sttService =
   typeof window !== "undefined" ? new BrowserSTTService() : null;
 
+function getAIInfo(type: string) {
+  const grammarAI = SECTIONS_DATA.grammarLevels.find(
+    (level) => level.type === type,
+  );
+  if (grammarAI) {
+    return {
+      name: grammarAI.aiName,
+      profession: grammarAI.profession,
+      color: "teal",
+    };
+  }
+
+  const realWorldAI = SECTIONS_DATA.realWorld.find(
+    (scenario) => scenario.type === type,
+  );
+  if (realWorldAI) {
+    return {
+      name: realWorldAI.aiName,
+      profession: realWorldAI.profession,
+      color: realWorldAI.color,
+    };
+  }
+
+  return {
+    name: "AI Tutor",
+    profession: "Language Assistant",
+    color: "teal",
+  };
+}
+
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
@@ -37,6 +67,7 @@ export default function Chat() {
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "medical";
+  const aiInfo = getAIInfo(type);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -172,14 +203,21 @@ export default function Chat() {
         <div className="h-16 px-4 border-b border-gray-200 bg-white flex items-center justify-between sticky top-0">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 flex items-center justify-center text-white text-sm font-medium">
-                MA
+              <div
+                className={`w-8 h-8 rounded-full bg-gradient-to-r from-${aiInfo.color}-500 to-${aiInfo.color}-600 flex items-center justify-center text-white text-sm font-medium`}
+              >
+                {aiInfo.name
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")}
               </div>
               <div>
                 <h1 className="text-base font-medium text-gray-800 flex items-center gap-2">
-                  Maxwell Anderson
-                  <span className="px-1.5 py-0.5 bg-teal-50 text-teal-600 rounded-full text-xs font-medium">
-                    Medical
+                  {aiInfo.name}
+                  <span
+                    className={`px-2 py-0.5 bg-${aiInfo.color}-50 text-${aiInfo.color}-600 rounded-full text-xs font-medium`}
+                  >
+                    {aiInfo.profession}
                   </span>
                 </h1>
               </div>
