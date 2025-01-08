@@ -19,13 +19,14 @@ import {
 } from "@/components/ui/card";
 import { Globe, BookOpen, ArrowLeft } from "lucide-react";
 
-const languages = [
+const nativeLanguages = [
   { code: "ar", name: "Arabic", flag: "🇲🇦" },
-  { code: "en", name: "English", flag: "🇬🇧" },
   { code: "fr", name: "French", flag: "🇫🇷" },
   { code: "es", name: "Spanish", flag: "🇪🇸" },
   { code: "de", name: "German", flag: "🇩🇪" },
 ];
+
+const targetLanguages = [{ code: "en", name: "English", flag: "🇬🇧" }];
 
 export function Onboarding() {
   const [step, setStep] = useState(1);
@@ -58,45 +59,52 @@ export function Onboarding() {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-700/90 backdrop-blur-sm z-50 flex items-center justify-center">
-      <Card className="w-[90%] max-w-[500px] bg-white text-teal-700 shadow-xl rounded-lg">
+    <div className="fixed inset-0 bg-gray-800/90 backdrop-blur-sm z-50 flex items-center justify-center">
+      <Card className="w-[90%] max-w-[500px] bg-white text-teal-800 shadow-xl rounded-lg">
         <CardHeader>
-          <CardTitle className="text-teal-700 text-2xl font-bold">
+          <CardTitle className="text-teal-800 text-2xl font-bold">
             Welcome to AI Voice Tutor
           </CardTitle>
-          <CardDescription className="text-teal-600">
+          <CardDescription className="text-teal-700">
             Let's personalize your learning experience
           </CardDescription>
         </CardHeader>
         <CardContent>
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-teal-700">
+              <h3 className="text-xl font-semibold text-teal-800">
                 What's your name?
               </h3>
               <Input
                 placeholder="Enter your name"
                 value={formData.name}
                 onChange={(e) => updateForm("name", e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && formData.name) {
+                    handleNext();
+                  }
+                }}
               />
             </div>
           )}
 
           {step === 2 && (
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold flex items-center text-teal-700">
-                <Globe className="mr-2 text-yellow-400" /> What's your native
+              <h3 className="text-xl font-semibold flex items-center text-teal-800">
+                <Globe className="mr-2 text-yellow-500" /> What's your native
                 language?
               </h3>
               <Select
                 value={formData.nativeLanguage}
-                onValueChange={(value) => updateForm("nativeLanguage", value)}
+                onValueChange={(value: string) =>
+                  updateForm("nativeLanguage", value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select your native language" />
                 </SelectTrigger>
                 <SelectContent>
-                  {languages.map((lang) => (
+                  {nativeLanguages.map((lang) => (
                     <SelectItem key={lang.code} value={lang.code}>
                       {lang.flag} {lang.name}
                     </SelectItem>
@@ -108,19 +116,21 @@ export function Onboarding() {
 
           {step === 3 && (
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold flex items-center text-teal-700">
-                <BookOpen className="mr-2 text-green-400" /> What language do
+              <h3 className="text-xl font-semibold flex items-center text-teal-800">
+                <BookOpen className="mr-2 text-green-500" /> What language do
                 you want to learn?
               </h3>
               <Select
                 value={formData.targetLanguage}
-                onValueChange={(value) => updateForm("targetLanguage", value)}
+                onValueChange={(value: string) =>
+                  updateForm("targetLanguage", value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select language to learn" />
                 </SelectTrigger>
                 <SelectContent>
-                  {languages.map((lang) => (
+                  {targetLanguages.map((lang) => (
                     <SelectItem key={lang.code} value={lang.code}>
                       {lang.flag} {lang.name}
                     </SelectItem>
@@ -135,7 +145,7 @@ export function Onboarding() {
               <Button
                 onClick={handleBack}
                 variant="outline"
-                className="text-teal-700 border-teal-700"
+                className="text-teal-800 border-teal-800"
               >
                 <ArrowLeft className="mr-2" /> Back
               </Button>
@@ -147,7 +157,7 @@ export function Onboarding() {
                 (step === 2 && !formData.nativeLanguage) ||
                 (step === 3 && !formData.targetLanguage)
               }
-              className="bg-teal-700 text-white"
+              className="bg-teal-800 text-white hover:bg-teal-900"
             >
               {step === 3 ? "Get Started" : "Next"}
             </Button>
