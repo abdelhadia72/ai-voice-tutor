@@ -6,7 +6,7 @@ import { SECTIONS_DATA } from "@/lib/data/sections";
 import Link from "next/link";
 import { usePaywall } from "@/hooks/use-paywall";
 import { PaywallModal } from "@/components/PaywallModal";
-import { Crown, Sparkles, Rocket, Star, Users, Timer, Mic, Globe, BookOpen, BarChart } from "lucide-react";
+import { Crown, Sparkles, Rocket, Star, Users, Timer, Mic, Globe, BookOpen, BarChart, Video, Brain, Smile, Camera, Eye, Zap } from "lucide-react";
 
 export function QuizCard({ title, score }: { title: string; score: number }) {
   return (
@@ -115,7 +115,7 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Real-time AI Chat</h3>
-                        <p className="text-blue-100 text-sm">Practice with AI Tutor</p>
+                        <p className="text-blue-100 text-sm">Human-like Conversations</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
@@ -126,26 +126,30 @@ export default function Dashboard() {
 
                   <div className="mt-6 grid grid-cols-2 gap-2.5">
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Timer className="w-4 h-4" />
-                      <span>Live Feedback</span>
-                    </div>
-                    <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Star className="w-4 h-4" />
-                      <span>AI-Powered</span>
+                      <Video className="w-4 h-4" />
+                      <span>Camera Chat</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
                       <Mic className="w-4 h-4" />
-                      <span>Voice Chat</span>
+                      <span>Voice Recognition</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Globe className="w-4 h-4" />
-                      <span>Multi-language</span>
+                      <Brain className="w-4 h-4" />
+                      <span>Real-time AI</span>
+                    </div>
+                    <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
+                      <Smile className="w-4 h-4" />
+                      <span>Human-like Chat</span>
                     </div>
                   </div>
 
-                  <button className="mt-5 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
-                    Start Chatting
-                    <Rocket className="w-4 h-4" />
+                  <p className="mt-4 text-sm text-blue-100/80 bg-white/5 backdrop-blur-sm p-2.5 rounded-lg">
+                    Experience natural conversations with AI that can see, hear, and respond like a real tutor
+                  </p>
+
+                  <button className="mt-4 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
+                    Start Real-time Chat
+                    <Video className="w-4 h-4" />
                   </button>
                 </div>
               </Card>
@@ -162,7 +166,7 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">Story Mode</h3>
-                        <p className="text-emerald-100 text-sm">Interactive Adventures</p>
+                        <p className="text-emerald-100 text-sm">Interactive Reality</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
@@ -173,26 +177,30 @@ export default function Dashboard() {
 
                   <div className="mt-6 grid grid-cols-2 gap-2.5">
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Users className="w-4 h-4" />
-                      <span>Interactive</span>
+                      <Camera className="w-4 h-4" />
+                      <span>Reality Check</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Star className="w-4 h-4" />
-                      <span>Immersive</span>
+                      <Eye className="w-4 h-4" />
+                      <span>Visual Learning</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <BookOpen className="w-4 h-4" />
-                      <span>Scenarios</span>
+                      <Mic className="w-4 h-4" />
+                      <span>Voice Input</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <BarChart className="w-4 h-4" />
-                      <span>Progress</span>
+                      <Zap className="w-4 h-4" />
+                      <span>Instant React</span>
                     </div>
                   </div>
 
-                  <button className="mt-5 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
-                    Start Journey
-                    <Rocket className="w-4 h-4" />
+                  <p className="mt-4 text-sm text-emerald-100/80 bg-white/5 backdrop-blur-sm p-2.5 rounded-lg">
+                    Use your camera and voice to interact with AI in real-world scenarios
+                  </p>
+
+                  <button className="mt-4 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
+                    Start Adventure
+                    <Camera className="w-4 h-4" />
                   </button>
                 </div>
               </Card>
