@@ -61,10 +61,15 @@ export default function TranslationPanel({
           body: JSON.stringify({
             text,
             voice: "alloy",
+            language: nativeLanguage
           }),
         });
 
         const data = await response.json();
+        if (data.error) {
+          console.error("TTS error:", data.error);
+          throw new Error(data.error);
+        }
         if (data.audioUrl) {
           audioUrl = data.audioUrl;
           setAudioCache((prev) => ({ ...prev, [id]: audioUrl }));

@@ -22,38 +22,70 @@ function generateCacheFilename(text: string, voice: string): string {
   return `${hash}.mp3`;
 }
 
+// Map of voices optimized for different languages
+const VOICE_LANGUAGE_MAP: { [key: string]: string } = {
+  ar: "nova",    // Arabic - Nova has better pronunciation for Arabic
+  en: "alloy",   // English
+  fr: "echo",    // French
+  es: "nova",    // Spanish
+  de: "fable",   // German
+  default: "alloy"
+};
+
 export async function POST(req: Request) {
   try {
-    const { text, voice = "fable" } = await req.json();
+    const { text, voice = "alloy", language = "en" } = await req.json();
 
     if (!text) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
     }
 
-    const cacheFilename = generateCacheFilename(text, voice);
+    // Select the best voice for the language
+    const selectedVoice = VOICE_LANGUAGE_MAP[language] || voice;
+
+    const cacheFilename = generateCacheFilename(text, selectedVoice);
     const cacheFilePath = path.join(CACHE_DIR, cacheFilename);
     const publicUrl = `/audio-cache/${cacheFilename}`;
 
+    // Return cached audio if available
     if (fs.existsSync(cacheFilePath)) {
       return NextResponse.json({ audioUrl: publicUrl });
     }
 
-    const mp3 = await openai.audio.speech.create({
-      model: "tts-1",
-      voice: voice,
-      input: text,
-    });
+    // Set timeout for the OpenAI API call
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-    const buffer = Buffer.from(await mp3.arrayBuffer());
+    try {
+      const mp3 = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: selectedVoice,
+        input: text,
+      }, { signal: controller.signal });
 
-    fs.writeFileSync(cacheFilePath, buffer);
+      clearTimeout(timeoutId);
 
-    return NextResponse.json({ audioUrl: publicUrl });
-  } catch (error) {
+      const buffer = Buffer.from(await mp3.arrayBuffer());
+      fs.writeFileSync(cacheFilePath, buffer);
+
+      return NextResponse.json({ audioUrl: publicUrl });
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return NextResponse.json(
+          { error: "Request timed out" },
+          { status: 408 }
+        );
+      }
+      throw error; // Re-throw other errors to be caught by outer catch
+    }
+  } catch (error: unknown) {
     console.error("TTS error:", error);
     return NextResponse.json(
-      { error: "Failed to generate speech" },
-      { status: 500 },
+      { 
+        error: error instanceof Error ? error.message : "Failed to generate speech",
+        details: error
+      },
+      { status: 500 }
     );
   }
 }
