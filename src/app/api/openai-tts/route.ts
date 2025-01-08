@@ -24,7 +24,7 @@ function generateCacheFilename(text: string, voice: string): string {
 
 export async function POST(req: Request) {
   try {
-    const { text, voice = "alloy" } = await req.json();
+    const { text, voice = "fable" } = await req.json();
 
     if (!text) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });

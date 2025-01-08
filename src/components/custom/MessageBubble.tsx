@@ -2,7 +2,7 @@
 import { Bot, User, Languages, Play, Pause, Loader2 } from "lucide-react";
 import { RecordedAudioPlayer } from "./RecordedAudioPlayer";
 import { formatAIResponse } from "@/lib/services/formater/formatAIResponse";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useUserPreferences } from "@/store/userPreferences";
 
 interface Message {
@@ -29,6 +29,7 @@ export const MessageBubble = ({
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { nativeLanguage } = useUserPreferences();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const autoPlayedRef = useRef(false);
 
   const handleTranslate = async () => {
     if (isTranslating || !translationContext || !nativeLanguage) return;
@@ -57,7 +58,7 @@ export const MessageBubble = ({
     }
   };
 
-  const handlePlayAudio = async () => {
+  const handlePlayAudio = useCallback(async () => {
     if (isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
@@ -66,7 +67,8 @@ export const MessageBubble = ({
 
     try {
       setIsLoadingAudio(true);
-      if (!audioUrl) {
+
+      if (!audioUrl || !audioRef.current) {
         const response = await fetch("/api/openai-tts", {
           method: "POST",
           headers: {
@@ -81,16 +83,17 @@ export const MessageBubble = ({
         const data = await response.json();
         if (data.audioUrl) {
           setAudioUrl(data.audioUrl);
-          if (!audioRef.current) {
-            audioRef.current = new Audio(data.audioUrl);
-            audioRef.current.onended = () => setIsPlaying(false);
-          } else {
-            audioRef.current.src = data.audioUrl;
-          }
+          audioRef.current = new Audio(data.audioUrl);
+          audioRef.current.onended = () => {
+            setIsPlaying(false);
+            setIsLoadingAudio(false);
+          };
         }
       }
 
+      // Play the audio
       if (audioRef.current) {
+        audioRef.current.currentTime = 0;
         await audioRef.current.play();
         setIsPlaying(true);
       }
@@ -99,21 +102,36 @@ export const MessageBubble = ({
     } finally {
       setIsLoadingAudio(false);
     }
-  };
+  }, [isPlaying, audioUrl, message.parts]);
 
-  // Auto-play for AI responses
   useEffect(() => {
-    if (!isUser && message.parts[0]) {
-      handlePlayAudio();
+    let mounted = true;
+
+    if (!isUser && message.parts[0] && !autoPlayedRef.current && mounted) {
+      autoPlayedRef.current = true;
+      setTimeout(() => {
+        if (mounted) {
+          handlePlayAudio();
+        }
+      }, 100);
     }
-  }, [message.parts[0], isUser]);
+
+    return () => {
+      mounted = false;
+    };
+  }, [isUser, message.parts, handlePlayAudio]);
 
   useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.currentTime = 0;
         audioRef.current = null;
       }
+      autoPlayedRef.current = false;
+      setAudioUrl(null);
+      setIsPlaying(false);
+      setIsLoadingAudio(false);
     };
   }, []);
 

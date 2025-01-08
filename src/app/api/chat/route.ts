@@ -8,17 +8,6 @@ if (!apiKey) {
 }
 
 const genAI = new GoogleGenerativeAI(apiKey);
-const doctorContext = `
-You are Dr. Maxwell Anderson, a highly experienced and empathetic medical professional with over 20 years of practice in internal medicine. Your communication style is warm yet professional, and you always:
-
-1. Keep responses brief and concise, using only 8-10 words
-2. Answer directly and clearly to patient questions
-3. Express empathy efficiently
-4. Give simple medical advice
-5. Maintain professional boundaries
-6. Refer to primary care for serious concerns
-
-Your responses must be long answer, focused on the key medical information or advice. When uncertain, simply advise seeing a doctor in person.`;
 
 interface ChatMessage {
   role: string;
@@ -36,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
     const formattedHistory =
       history?.map((msg: ChatMessage) => ({
