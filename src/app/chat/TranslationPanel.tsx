@@ -2,8 +2,7 @@
 
 import { useUserPreferences } from "@/store/userPreferences";
 import { Play, Pause } from "lucide-react";
-import { useState } from "react";
-import { BrowserTTSService } from "@/lib/services/tts/tts-service";
+import { useState, useRef, useEffect } from "react";
 
 const languages = {
   ar: "ARABIC",
@@ -24,27 +23,73 @@ interface TranslationPanelProps {
   updateToggle?: (value: boolean) => void;
 }
 
+interface AudioCache {
+  [key: string]: string;
+}
+
 export default function TranslationPanel({ translations, toggle, updateToggle }: TranslationPanelProps) {
   const { targetLanguage, nativeLanguage } = useUserPreferences();
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const ttsService = typeof window !== "undefined" ? new BrowserTTSService() : null;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [audioCache, setAudioCache] = useState<AudioCache>({});
 
   const getLanguageDisplay = (code: string) => {
     return languages[code as keyof typeof languages] || code.toUpperCase();
   };
 
   const handlePlay = async (text: string, id: string) => {
-    if (!ttsService) return;
-    
     if (playingId === id) {
-      ttsService.stop();
+      audioRef.current?.pause();
       setPlayingId(null);
-    } else {
-      setPlayingId(id);
-      await ttsService.speak(text);
-      setPlayingId(null);
+      return;
+    }
+
+    try {
+      let audioUrl = audioCache[id];
+
+      if (!audioUrl) {
+        const response = await fetch("/api/openai-tts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text,
+            voice: "alloy", // You can customize this based on language
+          }),
+        });
+
+        const data = await response.json();
+        if (data.audioUrl) {
+          audioUrl = data.audioUrl;
+          setAudioCache(prev => ({ ...prev, [id]: audioUrl }));
+        }
+      }
+
+      if (audioUrl) {
+        if (!audioRef.current) {
+          audioRef.current = new Audio(audioUrl);
+          audioRef.current.onended = () => setPlayingId(null);
+        } else {
+          audioRef.current.src = audioUrl;
+        }
+        
+        audioRef.current.play();
+        setPlayingId(id);
+      }
+    } catch (error) {
+      console.error("Failed to play audio:", error);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className={`fixed lg:relative right-0 top-0 h-full bg-white border-l border-gray-200 flex flex-col w-[320px] transition-transform duration-300 ease-in-out z-40 ${

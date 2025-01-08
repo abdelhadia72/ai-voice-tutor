@@ -1,10 +1,8 @@
 "use client";
-import { Bot, User, Languages } from "lucide-react";
+import { Bot, User, Languages, Play, Pause } from "lucide-react";
 import { RecordedAudioPlayer } from "./RecordedAudioPlayer";
-import { AudioPlayer } from "../audio/AudioPlayer";
-import { BrowserTTSService } from "@/lib/services/tts/tts-service";
 import { formatAIResponse } from "@/lib/services/formater/formatAIResponse";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useUserPreferences } from "@/store/userPreferences";
 
 interface Message {
@@ -26,11 +24,10 @@ export const MessageBubble = ({
 }) => {
   const isUser = message.role === "user";
   const [isTranslating, setIsTranslating] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { nativeLanguage } = useUserPreferences();
-
-  // Initialize TTS service only on client-side
-  const ttsService =
-    typeof window !== "undefined" ? new BrowserTTSService() : null;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleTranslate = async () => {
     if (isTranslating || !translationContext || !nativeLanguage) return;
@@ -58,6 +55,56 @@ export const MessageBubble = ({
       setIsTranslating(false);
     }
   };
+
+  const handlePlayAudio = async () => {
+    if (isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    try {
+      if (!audioUrl) {
+        const response = await fetch("/api/openai-tts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: message.parts[0],
+            voice: "alloy", // You can customize this based on preferences
+          }),
+        });
+
+        const data = await response.json();
+        if (data.audioUrl) {
+          setAudioUrl(data.audioUrl);
+          if (!audioRef.current) {
+            audioRef.current = new Audio(data.audioUrl);
+            audioRef.current.onended = () => setIsPlaying(false);
+          } else {
+            audioRef.current.src = data.audioUrl;
+          }
+        }
+      }
+
+      if (audioRef.current) {
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("Failed to play audio:", error);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -103,18 +150,21 @@ export const MessageBubble = ({
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                {ttsService && (
-                  <AudioPlayer
-                    text={message.parts[0]}
-                    ttsService={ttsService}
-                    autoPlay={true}
-                  />
-                )}
+                <button
+                  onClick={handlePlayAudio}
+                  className="p-2 bg-blue-500 hover:bg-blue-500/50 rounded-full transition-colors"
+                >
+                  {isPlaying ? (
+                    <Pause className="h-4 w-4 text-white" />
+                  ) : (
+                    <Play className="h-4 w-4 text-white" />
+                  )}
+                </button>
                 {translationContext && nativeLanguage && (
                   <button
                     onClick={handleTranslate}
                     disabled={isTranslating}
-                    className="p-2 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors disabled:opacity-50"
+                    className="p-2 bg-blue-500 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
                     title={`Translate to ${nativeLanguage.toUpperCase()}`}
                   >
                     <Languages className="h-4 w-4 text-white" />

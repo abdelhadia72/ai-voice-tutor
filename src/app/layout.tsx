@@ -3,6 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ContentWrapper from "@/components/ContentWrapper";
 import { OnboardingWrapper } from "@/components/OnboardingWrapper";
+import { initAudioCache } from "@/lib/init-cache";
+
+// Initialize audio cache directory
+initAudioCache();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
