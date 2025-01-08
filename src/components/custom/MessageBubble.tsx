@@ -1,9 +1,10 @@
 "use client";
-import { Bot, User } from "lucide-react";
+import { Bot, User, Languages } from "lucide-react";
 import { RecordedAudioPlayer } from "./RecordedAudioPlayer";
 import { AudioPlayer } from "../audio/AudioPlayer";
 import { BrowserTTSService } from "@/lib/services/tts/tts-service";
 import { formatAIResponse } from "@/lib/services/formater/formatAIResponse";
+import { useState } from "react";
 
 interface Message {
   role: "user" | "model";
@@ -11,12 +12,49 @@ interface Message {
   audioUrl?: string;
 }
 
-export const MessageBubble = ({ message }: { message: Message }) => {
+interface TranslationContextType {
+  addTranslation: (text: string, translation: string) => void;
+}
+
+export const MessageBubble = ({ 
+  message, 
+  translationContext 
+}: { 
+  message: Message;
+  translationContext?: TranslationContextType;
+}) => {
   const isUser = message.role === "user";
+  const [isTranslating, setIsTranslating] = useState(false);
 
   // Initialize TTS service only on client-side
   const ttsService =
     typeof window !== "undefined" ? new BrowserTTSService() : null;
+
+  const handleTranslate = async () => {
+    if (isTranslating || !translationContext) return;
+    setIsTranslating(true);
+
+    try {
+      const response = await fetch('/api/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: message.parts[0]
+        })
+      });
+
+      const data = await response.json();
+      if (data.translation) {
+        translationContext.addTranslation(data.original, data.translation);
+      }
+    } catch (error) {
+      console.error('Translation failed:', error);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   return (
     <div
@@ -63,13 +101,25 @@ export const MessageBubble = ({ message }: { message: Message }) => {
                   AI Assistant
                 </span>
               </div>
-              {ttsService && (
-                <AudioPlayer
-                  text={message.parts[0]}
-                  ttsService={ttsService}
-                  autoPlay={true}
-                />
-              )}
+              <div className="flex items-center gap-2">
+                {ttsService && (
+                  <AudioPlayer
+                    text={message.parts[0]}
+                    ttsService={ttsService}
+                    autoPlay={true}
+                  />
+                )}
+                {translationContext && (
+                  <button
+                    onClick={handleTranslate}
+                    disabled={isTranslating}
+                    className="p-1.5 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
+                    title="Translate to Arabic"
+                  >
+                    <Languages className="h-4 w-4 text-white" />
+                  </button>
+                )}
+              </div>
             </div>
             <div className="prose prose-lg prose-invert font-normal text-[15px] leading-relaxed tracking-wide">
               {formatAIResponse(message.parts[0])}
