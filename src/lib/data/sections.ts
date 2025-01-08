@@ -8,6 +8,7 @@ export const SECTIONS_DATA = {
       color: "red",
       type: "grammar-basic",
       description: "Start your journey with essential grammar concepts",
+      isPro: false
     },
     {
       id: "intermediate",
@@ -17,6 +18,7 @@ export const SECTIONS_DATA = {
       color: "orange",
       type: "grammar-intermediate",
       description: "Build more complex language structures",
+      isPro: true
     },
     {
       id: "advanced",
@@ -26,6 +28,7 @@ export const SECTIONS_DATA = {
       color: "amber",
       type: "grammar-advanced",
       description: "Master sophisticated grammar patterns",
+      isPro: true
     },
     {
       id: "expert",
@@ -35,6 +38,7 @@ export const SECTIONS_DATA = {
       color: "yellow",
       type: "grammar-expert",
       description: "Achieve native-like grammar proficiency",
+      isPro: true
     },
   ],
   realWorld: [
@@ -46,6 +50,7 @@ export const SECTIONS_DATA = {
       color: "sky",
       type: "scenario-restaurant",
       description: "Learn to navigate dining experiences",
+      isPro: true
     },
     {
       id: "job-interview",
@@ -55,6 +60,7 @@ export const SECTIONS_DATA = {
       color: "cyan",
       type: "scenario-interview",
       description: "Master professional interview situations",
+      isPro: false
     },
     {
       id: "shopping",
@@ -64,6 +70,7 @@ export const SECTIONS_DATA = {
       color: "teal",
       type: "scenario-shopping",
       description: "Practice retail and shopping dialogues",
+      isPro: true
     },
     {
       id: "travel",
@@ -73,6 +80,7 @@ export const SECTIONS_DATA = {
       color: "emerald",
       type: "scenario-travel",
       description: "Navigate travel situations confidently",
+      isPro: true
     },
-  ],
-};
+  ]
+}

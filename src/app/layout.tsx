@@ -4,8 +4,8 @@ import "./globals.css";
 import ContentWrapper from "@/components/ContentWrapper";
 import { OnboardingWrapper } from "@/components/OnboardingWrapper";
 import { initAudioCache } from "@/lib/init-cache";
+import { PaywallProvider } from "@/components/PaywallProvider";
 
-// Initialize audio cache directory
 initAudioCache();
 
 const geistSans = Geist({
@@ -31,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-        <ContentWrapper>
-          <OnboardingWrapper>{children}</OnboardingWrapper>
-        </ContentWrapper>
+        <PaywallProvider>
+          <ContentWrapper>
+            <OnboardingWrapper>{children}</OnboardingWrapper>
+          </ContentWrapper>
+        </PaywallProvider>
       </body>
     </html>
   );

@@ -37,7 +37,6 @@ export default function Chat() {
 
   const searchParams = useSearchParams();
   const type = searchParams.get("type") || "medical";
-  console.log(" type is from client ", type);
 
   useEffect(() => {
     if (chatContainerRef.current) {

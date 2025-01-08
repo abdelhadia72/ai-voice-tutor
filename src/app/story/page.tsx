@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import {
   ChevronDown,
@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { usePaywall } from "@/hooks/use-paywall";
+import { PaywallModal } from "@/components/PaywallModal";
 
 interface Story {
   id: number;
@@ -37,6 +39,7 @@ interface Episode {
 }
 
 export default function Page() {
+  const { checkAccess, showPaywall, closePaywall } = usePaywall();
   const router = useRouter();
   const [currentLevel] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -68,7 +71,7 @@ export default function Page() {
       icon: <Plane />,
       isOpen: true,
       type: "airport",
-      isLocked: false,
+      isLocked: true,
       color: "bg-blue-100 text-blue-600",
     },
     {
@@ -119,41 +122,35 @@ export default function Page() {
     },
   ]);
 
-  const handleEpisodeClick = (episode: Episode) => {
-    if (episode.isLocked) {
-      router.push(`/chat/${episode.type}`);
-    } else {
-      setEpisodes(
-        episodes.map((ep) =>
-          ep.id === episode.id ? { ...ep, isOpen: !ep.isOpen } : ep,
-        ),
-      );
-    }
+  const handleEpisodeClick = (e: React.MouseEvent, episode: Episode) => {
+    e.preventDefault();
+    checkAccess();
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <div className="flex-1">
-        <div className="py-8 px-6">
-          <div className="max-w-4xl mx-auto">
-            {/* Display Tag */}
-            <div className="flex items-center justify-center gap-3 py-10">
-              <Backpack className="w-8 h-8 text-yellow-400" />
-              <span className="text-2xl font-bold text-gray-900 tracking-wide">
-                American Journey
-              </span>
-            </div>
+    <>
+      {showPaywall && <PaywallModal onClose={closePaywall} />}
+      <div className="min-h-screen bg-gray-50 flex">
+        <div className="flex-1">
+          <div className="py-8 px-6">
+            <div className="max-w-4xl mx-auto">
+              {/* Display Tag */}
+              <div className="flex items-center justify-center gap-3 py-10">
+                <Backpack className="w-8 h-8 text-yellow-400" />
+                <span className="text-2xl font-bold text-gray-900 tracking-wide">
+                  American Journey
+                </span>
+              </div>
 
-            {/* Episodes */}
-            <div className="space-y-4">
-              {episodes.map((episode) => (
-                <div
-                  key={episode.id}
-                  className={`border-2 ${episode.isLocked ? "border-gray-100" : episode.color.replace("bg-", "border-").replace("100", "500")} rounded-xl overflow-hidden transition-all duration-200 hover:scale-[1.02]`}
-                >
-                  <Link href={`/real-time?type=${episode.type}`}>
+              {/* Episodes */}
+              <div className="space-y-4">
+                {episodes.map((episode) => (
+                  <div
+                    key={episode.id}
+                    className={`border-2 ${episode.isLocked ? "border-gray-100" : episode.color.replace("bg-", "border-").replace("100", "500")} rounded-xl overflow-hidden transition-all duration-200 hover:scale-[1.02]`}
+                  >
                     <button
-                      // onClick={() => handleEpisodeClick(episode)}
+                      onClick={(e) => handleEpisodeClick(e, episode)}
                       className="w-full p-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors"
                     >
                       <div className="flex items-center gap-4">
@@ -190,27 +187,25 @@ export default function Page() {
                         </div>
                       )}
                     </button>
-                  </Link>
 
-                  {episode.isOpen && !episode.isLocked && (
-                    <div className="p-4 border-t-2 border-dashed border-current bg-white/50">
-                      <p className="text-gray-600">{episode.description}</p>
-                      <Link href={`/real-time?type=${episode.type}`}>
+                    {episode.isOpen && !episode.isLocked && (
+                      <div className="p-4 border-t-2 border-dashed border-current bg-white/50">
+                        <p className="text-gray-600">{episode.description}</p>
                         <button
-                          // onClick={() => router.push(`/chat/${episode.type}`)}
+                          onClick={(e) => handleEpisodeClick(e, episode)}
                           className={`mt-4 px-6 py-3 ${episode.color.replace("bg-", "bg-").replace("100", "500")} text-white rounded-lg transition-colors hover:opacity-90`}
                         >
                           Start Conversation
                         </button>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
