@@ -1,8 +1,6 @@
 # Practago - Your AI Language Learning Companion
 
 <div align="center">
-    [![IMAGE ALT TEXT](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch
-
   *Modern AI-powered language learning platform*
 </div>
 
