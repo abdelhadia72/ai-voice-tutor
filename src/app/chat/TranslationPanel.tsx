@@ -30,7 +30,6 @@ interface AudioCache {
 export default function TranslationPanel({
   translations,
   toggle,
-  updateToggle,
 }: TranslationPanelProps) {
   const { targetLanguage, nativeLanguage } = useUserPreferences();
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -101,7 +100,7 @@ export default function TranslationPanel({
 
   return (
     <div
-      className={`fixed lg:relative right-0 top-0 h-full bg-white border-l border-gray-200 flex flex-col w-[320px] lg:w-[450px] transition-transform duration-300 ease-in-out z-40 ${
+      className={`fixed lg:relative right-0 top-0 h-full bg-white border-l border-gray-200 flex flex-col w-[320px] lg:w-[450px] transition-transform duration-300 ease-in-out z-[9999] ${
         toggle ? "translate-x-0" : "translate-x-full lg:translate-x-0"
       }`}
     >
@@ -121,7 +120,7 @@ export default function TranslationPanel({
             key={index}
             className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
           >
-            {/* Original Text */}
+            {/* original text */}
             <div className="p-3 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -149,7 +148,7 @@ export default function TranslationPanel({
               </p>
             </div>
 
-            {/* Translation */}
+            {/* translation */}
             <div className="p-3 bg-gradient-to-r from-teal-50 to-white">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">

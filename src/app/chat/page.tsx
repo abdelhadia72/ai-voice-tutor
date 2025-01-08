@@ -198,13 +198,13 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex h-screen max-h-screen w-full bg-white relative overflow-hidden">
+    <div className="flex h-[calc(100vh-4rem)] w-full bg-white relative overflow-hidden">
       <div className={`flex-1 flex flex-col min-w-0 h-full`}>
-        <div className="h-16 px-4 border-b border-gray-200 bg-white flex items-center justify-between sticky top-0">
+        <div className="h-16 px-4 border-b border-gray-200 bg-white flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <div
-                className={`w-8 h-8 rounded-full bg-gradient-to-r from-${aiInfo.color}-500 to-${aiInfo.color}-600 flex items-center justify-center text-white text-sm font-medium`}
+                className={`w-8 h-8 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 flex items-center justify-center text-white text-sm font-medium`}
               >
                 {aiInfo.name
                   .split(" ")
@@ -215,7 +215,7 @@ export default function Chat() {
                 <h1 className="text-base font-medium text-gray-800 flex items-center gap-2">
                   {aiInfo.name}
                   <span
-                    className={`px-2 py-0.5 bg-${aiInfo.color}-50 text-${aiInfo.color}-600 rounded-full text-xs font-medium`}
+                    className={`px-2 py-0.5 bg-teal-100 text-teal-600 rounded-full text-xs font-medium`}
                   >
                     {aiInfo.profession}
                   </span>
@@ -223,11 +223,14 @@ export default function Chat() {
               </div>
             </div>
           </div>
-
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors relative text-gray-600"
-            title="Toggle Translation"
+            className={`p-2 rounded-full transition-colors relative ${
+              isSidebarOpen
+                ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                : "hover:bg-gray-100 text-gray-600"
+            }`}
+            title="Toggle Translation Panel"
           >
             <Languages className="h-5 w-5" />
           </button>
@@ -304,7 +307,7 @@ export default function Chat() {
 
       {isSidebarOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity z-30"
+          className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity z-[9998]"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
