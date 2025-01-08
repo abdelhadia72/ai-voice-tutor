@@ -1,7 +1,9 @@
 # Practago - Your AI Language Learning Companion
 
 <div align="center">
-  <img src="public/images/practago-preview.png" alt="Practago Landing Page" width="100%" />
+    <rewrite_this>
+      <iframe width="100%" height="315" src="https://www.youtube.com/embed/IXEewFEDieU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </rewrite_this>
 
   *Modern AI-powered language learning platform*
 </div>
