@@ -56,6 +56,8 @@ import {
   Zap,
   Coffee,
   Hotel,
+  Star,
+  Users,
 } from "lucide-react";
 
 export const Icons = {
@@ -118,4 +120,6 @@ export const Icons = {
   hotel: Hotel,
   brain: Brain,
   smile: Smile,
+  star: Star,
+  users: Users,
 } as const;

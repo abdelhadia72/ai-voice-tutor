@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ContentWrapper from "@/components/ContentWrapper";
-import { OnboardingWrapper } from "@/components/OnboardingWrapper";
-import { initAudioCache } from "@/lib/init-cache";
 import { PaywallProvider } from "@/components/PaywallProvider";
+import { initAudioCache } from "@/lib/init-cache";
 
 initAudioCache();
 
@@ -19,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Voice Tutor",
-  description: "Learn languages with AI",
+  title: "Practago",
+  description: "Your personal language practice companion",
 };
 
 export default function RootLayout({
@@ -32,9 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
         <PaywallProvider>
-          <ContentWrapper>
-            <OnboardingWrapper>{children}</OnboardingWrapper>
-          </ContentWrapper>
+          {children}
         </PaywallProvider>
       </body>
     </html>

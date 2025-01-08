@@ -25,7 +25,7 @@ export function PaywallModal({ onClose }: PaywallModalProps) {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Icons.lock className="h-5 w-5" />
-            <CardTitle>Upgrade to Pro</CardTitle>
+            <CardTitle>Upgrade to Practago Pro</CardTitle>
           </div>
           <CardDescription>
             Get unlimited access to all premium features
