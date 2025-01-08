@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { useSidebarStore } from "../store/sidebarStore";
+import { useUserPreferences } from "../store/userPreferences";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -14,6 +15,17 @@ interface SidebarProps {
 export function Sidebar({ children }: SidebarProps) {
   const pathname = usePathname();
   const { isOpen, toggleSidebar, items } = useSidebarStore();
+  const { name } = useUserPreferences();
+  
+  // Get initials from name
+  const initials = name
+    ? name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "?";
 
   return (
     <>
@@ -36,9 +48,9 @@ export function Sidebar({ children }: SidebarProps) {
           <div className="p-4 border-b border-zinc-200">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center">
-                <span className="text-zinc-600 text-sm">AM</span>
+                <span className="text-zinc-600 text-sm">{initials}</span>
               </div>
-              <span className="text-sm text-zinc-600">Ali Mo</span>
+              <span className="text-sm text-zinc-600">{name || "Guest"}</span>
             </div>
           </div>
 

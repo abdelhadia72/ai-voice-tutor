@@ -5,6 +5,7 @@ import { AudioPlayer } from "../audio/AudioPlayer";
 import { BrowserTTSService } from "@/lib/services/tts/tts-service";
 import { formatAIResponse } from "@/lib/services/formater/formatAIResponse";
 import { useState } from "react";
+import { useUserPreferences } from "@/store/userPreferences";
 
 interface Message {
   role: "user" | "model";
@@ -16,33 +17,35 @@ interface TranslationContextType {
   addTranslation: (text: string, translation: string) => void;
 }
 
-export const MessageBubble = ({ 
-  message, 
-  translationContext 
-}: { 
+export const MessageBubble = ({
+  message,
+  translationContext,
+}: {
   message: Message;
   translationContext?: TranslationContextType;
 }) => {
   const isUser = message.role === "user";
   const [isTranslating, setIsTranslating] = useState(false);
+  const { nativeLanguage } = useUserPreferences();
 
   // Initialize TTS service only on client-side
   const ttsService =
     typeof window !== "undefined" ? new BrowserTTSService() : null;
 
   const handleTranslate = async () => {
-    if (isTranslating || !translationContext) return;
+    if (isTranslating || !translationContext || !nativeLanguage) return;
     setIsTranslating(true);
 
     try {
-      const response = await fetch('/api/translate', {
-        method: 'POST',
+      const response = await fetch("/api/translate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: message.parts[0]
-        })
+          text: message.parts[0],
+          targetLanguage: nativeLanguage,
+        }),
       });
 
       const data = await response.json();
@@ -50,7 +53,7 @@ export const MessageBubble = ({
         translationContext.addTranslation(data.original, data.translation);
       }
     } catch (error) {
-      console.error('Translation failed:', error);
+      console.error("Translation failed:", error);
     } finally {
       setIsTranslating(false);
     }
@@ -73,7 +76,6 @@ export const MessageBubble = ({
           <Bot className="h-5 w-5 text-blue-600" />
         )}
       </div>
-
       <div
         className={`flex-1 p-4 rounded-2xl ${
           isUser
@@ -92,7 +94,6 @@ export const MessageBubble = ({
             )}
           </div>
         ) : (
-          // Render AI assistant message with TTS
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -109,12 +110,12 @@ export const MessageBubble = ({
                     autoPlay={true}
                   />
                 )}
-                {translationContext && (
+                {translationContext && nativeLanguage && (
                   <button
                     onClick={handleTranslate}
                     disabled={isTranslating}
                     className="p-1.5 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
-                    title="Translate to Arabic"
+                    title={`Translate to ${nativeLanguage.toUpperCase()}`}
                   >
                     <Languages className="h-4 w-4 text-white" />
                   </button>
