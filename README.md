@@ -1,11 +1,7 @@
 # Practago - Your AI Language Learning Companion
 
 <div align="center">
-    <rewrite_this>
-        <rewrite_this>
-          [![IMAGE ALT TEXT](http://img.youtube.com/vi/IXEewFEDieU/0.jpg)](http://www.youtube.com/watch?v=IXEewFEDieU "Video Title")
-        </rewrite_this>
-    </rewrite_this>
+    [![IMAGE ALT TEXT](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch
 
   *Modern AI-powered language learning platform*
 </div>
