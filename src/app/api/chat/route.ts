@@ -17,6 +17,7 @@ interface ChatMessage {
 export async function POST(req: NextRequest) {
   try {
     const { message, history, promptType } = await req.json();
+    const effectivePromptType = promptType || "normal";
 
     if (!message) {
       return NextResponse.json(
@@ -42,9 +43,7 @@ export async function POST(req: NextRequest) {
     });
 
     const selectedPrompt =
-      CHAT_PROMPTS[promptType as keyof typeof CHAT_PROMPTS];
-    console.log("promp is ", selectedPrompt);
-    console.log("promp is type is  ", promptType);
+      CHAT_PROMPTS[effectivePromptType as keyof typeof CHAT_PROMPTS];
     const prompt = `${selectedPrompt.prompt}\n\nPatient message: ${message}`;
     const result = await chat.sendMessage(prompt);
     console.log("res is res", result);
