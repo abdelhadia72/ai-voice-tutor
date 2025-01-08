@@ -3,7 +3,13 @@
 <div align="center">
   *Modern AI-powered language learning platform*
 </div>
-
+<div align="center">
+  <a href="https://youtu.be/Wa9hS0e3HQQ">
+    <img src="https://img.youtube.com/vi/Wa9hS0e3HQQ/0.jpg" alt="Practago Demo" style="width:80%; border: 2px solid #ccc; border-radius: 10px;">
+  </a>
+  <br>
+  <em>Check out our demo video!</em>
+</div>
 ## 🌟 Overview
 
 Practago is a cutting-edge language learning platform powered by multiple AI engines (OpenAI, Gemini,...) to provide personalized language practice and feedback. Through voice interactions, real-time corrections, and adaptive learning, users can achieve fluency faster and more effectively than traditional methods.
