@@ -3,40 +3,47 @@
 import Link from "next/link";
 import { Icons } from "@/lib/data/icons";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useState, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* nav */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b border-gray-200">
+    <main className="min-h-screen bg-white/40">
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/60 backdrop-blur-xl z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-500 flex items-center justify-center">
-                <Icons.languages className="h-5 w-5 text-white" />
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center transform group-hover:scale-105 transition-all duration-300">
+                <Icons.languages className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600">
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
                 Practago
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-6">
-             
-              <Link href="/chat">
+            {/* desktop navigation */}
+            <div className="hidden md:flex items-center gap-4">
+              <Link href="/dashboard">
                 <Button
                   variant="outline"
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                  className="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 transition-all duration-300"
                 >
                   Try Demo
                 </Button>
               </Link>
-              <Link href="/chat">
-                <Button className="bg-teal-600 hover:bg-teal-700 text-white">
+              <Link href="/dashboard">
+                <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg hover:shadow-xl hover:shadow-emerald-200/50 transition-all duration-300">
                   Get Started
                 </Button>
               </Link>
@@ -44,7 +51,7 @@ export default function LandingPage() {
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
               {isMobileMenuOpen ? (
                 <Icons.close className="h-6 w-6 text-gray-600" />
@@ -54,66 +61,68 @@ export default function LandingPage() {
             </button>
           </div>
 
-          {/* mobile nav */}
+          {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-100">
-              <div className="flex flex-col gap-4">
-                <Link
-                  href="/features"
-                  className="text-gray-600 hover:text-teal-600 px-2 py-1"
-                >
-                  Features
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="text-gray-600 hover:text-teal-600 px-2 py-1"
-                >
-                  Pricing
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-gray-600 hover:text-teal-600 px-2 py-1"
-                >
-                  About
-                </Link>
-                <Link href="/chat">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="md:hidden py-4 px-2 bg-white/80 backdrop-blur-lg rounded-2xl my-2 border border-gray-100"
+            >
+              <div className="flex flex-col gap-3">
+                <Link href="/dashboard" className="px-2">
                   <Button
                     variant="outline"
-                    className="w-full border-teal-600 text-teal-600 hover:bg-teal-50"
+                    className="w-full border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50"
                   >
                     Try Demo
                   </Button>
                 </Link>
-                <Link href="/chat">
-                  <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white">
+                <Link href="/dashboard" className="px-2">
+                  <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white">
                     Get Started
                   </Button>
                 </Link>
               </div>
-            </div>
+            </motion.div>
           )}
         </div>
       </nav>
 
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        {/* background */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgb(0_0_0/0.1)_1px,transparent_0)] [background-size:40px_40px] opacity-5" />
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-blue-500/10" />
+      {/* Hero */}
+      <section
+        ref={heroRef}
+        className="relative min-h-screen pt-32 overflow-hidden bg-white/40"
+      >
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf4_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf4_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgb(16_185_129/0.1)_0%,transparent_60%)] opacity-70" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgb(45_212_191/0.1)_0%,transparent_60%)] opacity-70" />
+        </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center space-y-8 max-w-4xl mx-auto">
+          <div className="text-center space-y-8 max-w-5xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6"
             >
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600 leading-tight">
-                Master Any Language with Practago
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-800 text-sm font-medium">
+                <Icons.star className="h-4 w-4" />
+                AI-Powered Language Learning
+              </span>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
+                  Turn Your Voice
+                </span>
+                <br />
+                <span className="text-gray-900">into Fluency</span>
               </h1>
-              <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
-                Experience personalized language learning with advanced AI
-                tutors. Real-time conversations, interactive stories, and
-                immersive practice.
+              <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Experience the future of language learning with our AI-powered
+                platform. Natural conversations, instant feedback, and
+                personalized lessons.
               </p>
             </motion.div>
 
@@ -123,410 +132,441 @@ export default function LandingPage() {
               transition={{ delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link href="/chat">
+              <Link href="/dashboard">
                 <Button
                   size="lg"
-                  className="bg-teal-600 hover:bg-teal-700 text-white px-8 h-14 text-lg"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-12 h-14 text-lg shadow-xl hover:shadow-2xl hover:shadow-emerald-200/50 transition-all duration-300 transform hover:-translate-y-1"
                 >
                   Start Learning Now
                 </Button>
               </Link>
-              <Link href="/story">
+              <Link href="/dashboard">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50 px-8 h-14 text-lg"
+                  className="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-12 h-14 text-lg transition-all duration-300 transform hover:-translate-y-1"
                 >
                   Try Demo
                 </Button>
               </Link>
             </motion.div>
 
-            
-          </div>
-
-          {/* feature cards */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature Cards */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white rounded-2xl p-6 shadow-xl shadow-teal-500/5 hover:shadow-teal-500/10 transition-all duration-300 border border-gray-100"
-            >
-              <div className="h-12 w-12 bg-teal-500/10 rounded-xl flex items-center justify-center mb-6">
-                <Icons.mic className="h-6 w-6 text-teal-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Real-time AI Conversations
-              </h3>
-              <p className="text-gray-600">
-                Practice speaking with our AI tutors that understand context and
-                provide instant feedback.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="bg-white rounded-2xl p-6 shadow-xl shadow-blue-500/5 hover:shadow-blue-500/10 transition-all duration-300 border border-gray-100"
-            >
-              <div className="h-12 w-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6">
-                <Icons.book className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Interactive Stories
-              </h3>
-              <p className="text-gray-600">
-                Learn through immersive story-based scenarios that adapt to your
-                level and interests.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-white rounded-2xl p-6 shadow-xl shadow-purple-500/5 hover:shadow-purple-500/10 transition-all duration-300 border border-gray-100"
+              className="relative mt-8 md:mt-20"
             >
-              <div className="h-12 w-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6">
-                <Icons.languages className="h-6 w-6 text-purple-600" />
+              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <motion.div
+                  initial={{ y: 0 }}
+                  animate={{ y: [-10, 10, -10] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 5,
+                    ease: "easeInOut",
+                  }}
+                  className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                      <Icons.mic className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">
+                        Voice Chat
+                      </h3>
+                      <p className="text-sm text-gray-600">Practice speaking</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-2 bg-emerald-100 rounded-full w-3/4" />
+                    <div className="h-2 bg-emerald-100 rounded-full w-1/2" />
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 0 }}
+                  animate={{ y: [10, -10, 10] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 5,
+                    ease: "easeInOut",
+                  }}
+                  className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+                      <Icons.brain className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">AI Tutor</h3>
+                      <p className="text-sm text-gray-600">
+                        Personalized lessons
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-2 bg-teal-100 rounded-full w-2/3" />
+                    <div className="h-2 bg-teal-100 rounded-full w-5/6" />
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 0 }}
+                  animate={{ y: [-5, 15, -5] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 5,
+                    ease: "easeInOut",
+                  }}
+                  className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+                      <Icons.languages className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">
+                        Translation
+                      </h3>
+                      <p className="text-sm text-gray-600">Instant feedback</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-2 bg-cyan-100 rounded-full w-4/5" />
+                    <div className="h-2 bg-cyan-100 rounded-full w-3/5" />
+                  </div>
+                </motion.div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Instant Translation
-              </h3>
-              <p className="text-gray-600">
-                Get real-time translations and explanations in your native
-                language.
-              </p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* how it works*/}
-      <section className="py-20 bg-gradient-to-b from-white to-zinc-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Our AI-powered platform adapts to your learning style and pace
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Step 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="text-center"
-            >
-              <div className="h-16 w-16 bg-teal-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icons.user className="h-8 w-8 text-teal-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Create Profile</h3>
-              <p className="text-gray-600">
-                Set your language goals and preferences
-              </p>
-            </motion.div>
-
-            {/* Step 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-              className="text-center"
-            >
-              <div className="h-16 w-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icons.brain className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">AI Assessment</h3>
-              <p className="text-gray-600">
-                Get your personalized learning path
-              </p>
-            </motion.div>
-
-            {/* Step 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0 }}
-              className="text-center"
-            >
-              <div className="h-16 w-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icons.mic className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Practice Speaking</h3>
-              <p className="text-gray-600">
-                Engage in real conversations with AI
-              </p>
-            </motion.div>
-
-            {/* Step 4 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 }}
-              className="text-center"
-            >
-              <div className="h-16 w-16 bg-rose-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icons.magic className="h-8 w-8 text-rose-600" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Track Progress</h3>
-              <p className="text-gray-600">See your improvement over time</p>
-            </motion.div>
-          </div>
+      {/* Pro Features */}
+      <section className="py-20 relative overflow-hidden bg-white/40">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf4_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf4_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgb(16_185_129/0.1)_0%,transparent_60%)] opacity-70" />
         </div>
-      </section>
-
-      {/* Premium Features Section */}
-      <section className="py-20 bg-gradient-to-b from-zinc-50 to-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Premium Features
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Unlock Pro Features
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Unlock advanced features to accelerate your learning
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Take your language learning to the next level
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Premium Feature 1 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.3 }}
-              className="bg-gradient-to-br from-teal-500 to-blue-600 rounded-2xl p-8 text-white"
+              className="bg-white/60 backdrop-blur-xl rounded-2xl p-8 shadow-xl border border-emerald-100"
             >
               <div className="flex items-center gap-4 mb-6">
-                <Icons.crown className="h-8 w-8" />
-                <h3 className="text-2xl font-semibold">
-                  Unlimited AI Conversations
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                  <Icons.mic className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  Advanced Voice Features
                 </h3>
               </div>
               <ul className="space-y-4">
-                <li className="flex items-center gap-2">
-                  <Icons.check className="h-5 w-5" />
-                  <span>24/7 access to AI language tutors</span>
+                <li className="flex items-center gap-3">
+                  <Icons.check className="h-5 w-5 text-emerald-500" />
+                  <span>Unlimited AI conversations</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Icons.check className="h-5 w-5" />
-                  <span>Advanced grammar correction</span>
+                <li className="flex items-center gap-3">
+                  <Icons.check className="h-5 w-5 text-emerald-500" />
+                  <span>Advanced pronunciation feedback</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Icons.check className="h-5 w-5" />
-                  <span>Pronunciation feedback</span>
+                <li className="flex items-center gap-3">
+                  <Icons.check className="h-5 w-5 text-emerald-500" />
+                  <span>Real-time grammar correction</span>
                 </li>
               </ul>
             </motion.div>
 
-            {/* Premium Feature 2 */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.4 }}
-              className="bg-gradient-to-br from-purple-500 to-rose-500 rounded-2xl p-8 text-white"
+              className="bg-white/60 backdrop-blur-xl rounded-2xl p-8 shadow-xl border border-emerald-100"
             >
               <div className="flex items-center gap-4 mb-6">
-                <Icons.magic className="h-8 w-8" />
-                <h3 className="text-2xl font-semibold">Interactive Stories</h3>
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+                  <Icons.brain className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  Premium Learning Tools
+                </h3>
               </div>
               <ul className="space-y-4">
-                <li className="flex items-center gap-2">
-                  <Icons.check className="h-5 w-5" />
-                  <span>Immersive learning scenarios</span>
+                <li className="flex items-center gap-3">
+                  <Icons.check className="h-5 w-5 text-teal-500" />
+                  <span>Personalized study plans</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Icons.check className="h-5 w-5" />
-                  <span>Real-world conversation practice</span>
+                <li className="flex items-center gap-3">
+                  <Icons.check className="h-5 w-5 text-teal-500" />
+                  <span>Progress analytics</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Icons.check className="h-5 w-5" />
-                  <span>Cultural insights and context</span>
+                <li className="flex items-center gap-3">
+                  <Icons.check className="h-5 w-5 text-teal-500" />
+                  <span>Offline mode access</span>
                 </li>
               </ul>
             </motion.div>
           </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-zinc-100">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5 }}
-            className="text-center"
+            transition={{ delay: 0.3 }}
+            className="text-center mt-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Start Your Language Journey Today
-            </h2>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join thousands of learners who are already mastering new languages
-              with AI
-            </p>
-            <Link href="/chat">
+            <Link href="/dashboard">
               <Button
                 size="lg"
-                className="bg-teal-600 hover:bg-teal-700 text-white px-12 h-14 text-lg"
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-12 h-14 text-lg shadow-xl hover:shadow-2xl hover:shadow-emerald-200/50 transition-all duration-300 transform hover:-translate-y-1"
               >
-                Get Started Free
+                Upgrade to Pro
               </Button>
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-zinc-100 py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Product</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/features"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/story"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Stories
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/about"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/blog"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/careers"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Careers
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Resources</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/help"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/community"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Community
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/feedback"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Feedback
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Legal</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Terms
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/cookies"
-                    className="text-gray-600 hover:text-teal-600"
-                  >
-                    Cookies
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-zinc-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-500 flex items-center justify-center">
-                  <Icons.languages className="h-5 w-5 text-white" />
+      {/* How it Works  */}
+      <section className="py-20 relative overflow-hidden bg-white/40">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf4_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf4_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-16"
+          >
+            <span className="text-sm font-medium text-emerald-600 mb-2 block">
+              Simple Steps
+            </span>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              How Practago Works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Start speaking a new language in minutes with our intuitive
+              process
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="relative group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
+              <div className="bg-white rounded-2xl p-8 shadow-sm relative border border-emerald-100/20 hover:border-emerald-200/30 transition-colors duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Icons.mic className="h-7 w-7 text-white" />
                 </div>
-                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600">
-                  Practago
-                </span>
+                <div className="absolute top-8 right-8 text-5xl font-bold text-emerald-50">
+                  01
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  Record Your Voice
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Speak naturally in your target language. Our AI understands
+                  context and provides real-time feedback.
+                </p>
               </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
+              <div className="bg-white rounded-2xl p-8 shadow-sm relative border border-teal-100/20 hover:border-teal-200/30 transition-colors duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Icons.brain className="h-7 w-7 text-white" />
+                </div>
+                <div className="absolute top-8 right-8 text-5xl font-bold text-teal-50">
+                  02
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  Get AI Feedback
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Receive instant corrections and suggestions to improve your
+                  pronunciation and grammar.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="relative group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
+              <div className="bg-white rounded-2xl p-8 shadow-sm relative border border-cyan-100/20 hover:border-cyan-200/30 transition-colors duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Icons.languages className="h-7 w-7 text-white" />
+                </div>
+                <div className="absolute top-8 right-8 text-5xl font-bold text-cyan-50">
+                  03
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  Track Progress
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Monitor your improvement with detailed analytics and
+                  personalized learning insights.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features  */}
+      <section className="py-20 relative overflow-hidden bg-white/40">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf4_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf4_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_800px_at_100%_200px,rgba(165,243,252,0.1),transparent)]" />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-16"
+          >
+            <span className="text-sm font-medium text-emerald-600 mb-2 block">
+              Core Features
+            </span>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Everything You Need
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Powerful features to enhance your language learning journey
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-xl"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center mb-4">
+                <Icons.mic className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Voice Recognition
+              </h3>
               <p className="text-gray-600">
-                © 2024 Practago. All rights reserved.
+                Advanced AI that understands your speech and provides instant
+                feedback
               </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-xl"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center mb-4">
+                <Icons.brain className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Smart Learning
+              </h3>
+              <p className="text-gray-600">
+                Personalized curriculum that adapts to your learning style
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-xl"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center mb-4">
+                <Icons.languages className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Multiple Languages
+              </h3>
+              <p className="text-gray-600">
+                Support for various languages with native speaker quality
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 relative overflow-hidden bg-white/40">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf4_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf4_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgb(45_212_191/0.1)_0%,transparent_60%)] opacity-70" />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Join thousands of learners and start speaking a new language today
+            </p>
+            <Link href="/dashboard">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-12 h-14 text-lg shadow-xl hover:shadow-2xl hover:shadow-emerald-200/50 transition-all duration-300 transform hover:-translate-y-1"
+              >
+                Get Started Now
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/*  Footer */}
+      <footer className="py-12 relative overflow-hidden bg-white/40 border-t border-emerald-100/20">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0fdf4_1px,transparent_1px),linear-gradient(to_bottom,#f0fdf4_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                <Icons.languages className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
+                Practago
+              </span>
             </div>
+            <p className="text-gray-600">
+              © 2024 Practago. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
