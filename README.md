@@ -2,7 +2,9 @@
 
 <div align="center">
     <rewrite_this>
-      <iframe width="100%" height="315" src="https://www.youtube.com/embed/IXEewFEDieU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <rewrite_this>
+          [![IMAGE ALT TEXT](http://img.youtube.com/vi/IXEewFEDieU/0.jpg)](http://www.youtube.com/watch?v=IXEewFEDieU "Video Title")
+        </rewrite_this>
     </rewrite_this>
 
   *Modern AI-powered language learning platform*
