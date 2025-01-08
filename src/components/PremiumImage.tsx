@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { usePremiumContent } from '@/hooks/use-premium-content';
-import { Lock } from 'lucide-react';
+import { Icons } from '@/lib/data/icons';
 
 interface PremiumImageProps {
   premiumSrc: string;
@@ -34,7 +34,7 @@ export function PremiumImage({
       {!isPro && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
           <div className="bg-white p-2 rounded-full">
-            <Lock className="w-6 h-6 text-blue-500" />
+            <Icons.lock className="w-6 h-6 text-blue-500" />
           </div>
         </div>
       )}

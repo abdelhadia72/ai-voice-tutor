@@ -1,9 +1,9 @@
 "use client";
-import { Bot, User, Languages, Play, Pause, Loader2 } from "lucide-react";
 import { RecordedAudioPlayer } from "./RecordedAudioPlayer";
 import { formatAIResponse } from "@/lib/services/formater/formatAIResponse";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useUserPreferences } from "@/store/userPreferences";
+import { Icons } from "@/lib/data/icons";
 
 interface Message {
   role: "user" | "model";
@@ -147,9 +147,9 @@ export const MessageBubble = ({
         }`}
       >
         {isUser ? (
-          <User className="h-5 w-5 text-teal-600" />
+          <Icons.user className="h-5 w-5" />
         ) : (
-          <Bot className="h-5 w-5 text-blue-600" />
+          <Icons.chatbot className="h-5 w-5" />
         )}
       </div>
       <div
@@ -185,11 +185,11 @@ export const MessageBubble = ({
                   className="p-2 bg-blue-500 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
                 >
                   {isLoadingAudio ? (
-                    <Loader2 className="h-4 w-4 text-white animate-spin" />
+                    <Icons.loading className="h-5 w-5 animate-spin" />
                   ) : isPlaying ? (
-                    <Pause className="h-4 w-4 text-white" />
+                    <Icons.pause className="h-5 w-5" />
                   ) : (
-                    <Play className="h-4 w-4 text-white" />
+                    <Icons.play className="h-5 w-5" />
                   )}
                 </button>
                 {translationContext && nativeLanguage && (
@@ -200,9 +200,9 @@ export const MessageBubble = ({
                     title={`Translate to ${nativeLanguage.toUpperCase()}`}
                   >
                     {isTranslating ? (
-                      <Loader2 className="h-4 w-4 text-white animate-spin" />
+                      <Icons.loading className="h-5 w-5 animate-spin" />
                     ) : (
-                      <Languages className="h-4 w-4 text-white" />
+                      <Icons.languages className="h-5 w-5" />
                     )}
                   </button>
                 )}

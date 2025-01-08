@@ -6,18 +6,6 @@ import { SECTIONS_DATA } from "@/lib/data/sections";
 import Link from "next/link";
 import { usePaywall } from "@/hooks/use-paywall";
 import { PaywallModal } from "@/components/PaywallModal";
-import {
-  Crown,
-  Sparkles,
-  Mic,
-  BookOpen,
-  Video,
-  Brain,
-  Smile,
-  Camera,
-  Eye,
-  Zap,
-} from "lucide-react";
 
 export function QuizCard({ title, score }: { title: string; score: number }) {
   return (
@@ -83,7 +71,7 @@ function CustomCard({
               <Icon className="mb-4 text-white/90" />
               {isPro && (
                 <div className="flex items-center gap-1 bg-yellow-500/20 px-2 py-1 rounded-full">
-                  <Crown className="w-4 h-4 text-yellow-400" />
+                  <Icons.crown className="w-4 h-4 text-yellow-400" />
                   <span className="text-xs font-medium text-yellow-400">
                     PRO
                   </span>
@@ -126,7 +114,7 @@ export default function Dashboard() {
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
-                        <Sparkles className="w-5 h-5 text-white" />
+                        <Icons.magic className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">
@@ -138,7 +126,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                      <Crown className="w-3.5 h-3.5 text-amber-300" />
+                      <Icons.crown className="w-3.5 h-3.5 text-amber-300" />
                       <span className="text-xs font-medium text-amber-300">
                         PRO
                       </span>
@@ -147,19 +135,19 @@ export default function Dashboard() {
 
                   <div className="mt-6 grid grid-cols-2 gap-2.5">
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Video className="w-4 h-4" />
+                      <Icons.video className="w-4 h-4" />
                       <span>Camera Chat</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Mic className="w-4 h-4" />
+                      <Icons.mic className="w-4 h-4" />
                       <span>Voice Recognition</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Brain className="w-4 h-4" />
+                      <Icons.brain className="w-4 h-4" />
                       <span>Real-time AI</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-blue-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Smile className="w-4 h-4" />
+                      <Icons.smile className="w-4 h-4" />
                       <span>Human-like Chat</span>
                     </div>
                   </div>
@@ -171,7 +159,7 @@ export default function Dashboard() {
 
                   <button className="mt-4 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
                     Start Real-time Chat
-                    <Video className="w-4 h-4" />
+                    <Icons.video className="w-4 h-4" />
                   </button>
                 </div>
               </Card>
@@ -184,7 +172,7 @@ export default function Dashboard() {
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
-                        <BookOpen className="w-5 h-5 text-white" />
+                        <Icons.book className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold text-white">
@@ -196,7 +184,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                      <Crown className="w-3.5 h-3.5 text-amber-300" />
+                      <Icons.crown className="w-3.5 h-3.5 text-amber-300" />
                       <span className="text-xs font-medium text-amber-300">
                         PRO
                       </span>
@@ -205,19 +193,19 @@ export default function Dashboard() {
 
                   <div className="mt-6 grid grid-cols-2 gap-2.5">
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Camera className="w-4 h-4" />
+                      <Icons.camera className="w-4 h-4" />
                       <span>Reality Check</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Eye className="w-4 h-4" />
+                      <Icons.eye className="w-4 h-4" />
                       <span>Visual Learning</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Mic className="w-4 h-4" />
+                      <Icons.mic className="w-4 h-4" />
                       <span>Voice Input</span>
                     </div>
                     <div className="flex items-center gap-2.5 text-emerald-100 bg-white/10 backdrop-blur-sm p-2.5 rounded-lg text-sm">
-                      <Zap className="w-4 h-4" />
+                      <Icons.zap className="w-4 h-4" />
                       <span>Instant React</span>
                     </div>
                   </div>
@@ -229,7 +217,7 @@ export default function Dashboard() {
 
                   <button className="mt-4 w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg transition-all flex items-center justify-center gap-2 text-sm font-medium">
                     Start Adventure
-                    <Camera className="w-4 h-4" />
+                    <Icons.camera className="w-4 h-4" />
                   </button>
                 </div>
               </Card>

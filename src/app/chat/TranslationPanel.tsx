@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserPreferences } from "@/store/userPreferences";
-import { Play, Pause, Loader2 } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { useState, useRef, useEffect } from "react";
 
 const languages = {
@@ -135,11 +135,11 @@ export default function TranslationPanel({
                   className="p-1.5 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
                 >
                   {loadingId === `orig-${index}` ? (
-                    <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />
+                    <Icons.loading className="h-5 w-5 animate-spin" />
                   ) : playingId === `orig-${index}` ? (
-                    <Pause className="h-4 w-4 text-blue-500" />
+                    <Icons.pause className="h-5 w-5" />
                   ) : (
-                    <Play className="h-4 w-4 text-blue-500" />
+                    <Icons.play className="h-5 w-5" />
                   )}
                 </button>
               </div>
@@ -163,11 +163,11 @@ export default function TranslationPanel({
                   className="p-1.5 hover:bg-teal-100 rounded-full transition-colors disabled:opacity-50"
                 >
                   {loadingId === `trans-${index}` ? (
-                    <Loader2 className="h-4 w-4 text-teal-500 animate-spin" />
+                    <Icons.loading className="h-5 w-5 animate-spin" />
                   ) : playingId === `trans-${index}` ? (
-                    <Pause className="h-4 w-4 text-teal-500" />
+                    <Icons.pause className="h-5 w-5" />
                   ) : (
-                    <Play className="h-4 w-4 text-teal-500" />
+                    <Icons.play className="h-5 w-5" />
                   )}
                 </button>
               </div>

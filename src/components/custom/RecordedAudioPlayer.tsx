@@ -1,5 +1,5 @@
 "use client";
-import { PauseCircle, Play } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { useEffect, useRef, useState } from "react";
 
 export const RecordedAudioPlayer = ({ audioUrl }: { audioUrl: string }) => {
@@ -38,9 +38,9 @@ export const RecordedAudioPlayer = ({ audioUrl }: { audioUrl: string }) => {
       }`}
     >
       {isPlaying ? (
-        <PauseCircle className="h-4 w-4 text-white" />
+        <Icons.pauseCircle className="h-5 w-5" />
       ) : (
-        <Play className="h-4 w-4 text-teal-600" />
+        <Icons.play className="h-5 w-5" />
       )}
     </button>
   );

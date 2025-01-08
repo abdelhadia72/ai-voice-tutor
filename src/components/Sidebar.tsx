@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, MessagesSquare, MessageSquareDot, X, Menu } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -34,19 +34,19 @@ export function Sidebar({ children }: SidebarProps) {
         className="fixed top-4 right-4 z-50 lg:hidden bg-zinc-50 p-2 rounded-lg hover:bg-zinc-100"
       >
         {isOpen ? (
-          <X className="w-6 h-6 text-zinc-600" />
+          <Icons.close className="h-4 w-4" />
         ) : (
-          <Menu className="w-6 h-6 text-zinc-600" />
+          <Icons.menu className="h-6 w-6" />
         )}
       </button>
 
       <div
         className={cn(
-          "h-full w-[300px] bg-zinc-100 lg:static fixed inset-y-0 left-0 transition-transform duration-200 ease-in-out lg:translate-x-0 z-50",
+          "h-full w-[300px] bg-zinc-100 lg:static fixed inset-y-0 left-0 transition-transform duration-200 ease-in-out lg:translate-x-0 z-[9999]",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full z-[9999]">
           <div className="p-4 border-b border-zinc-200">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center">
@@ -67,7 +67,7 @@ export function Sidebar({ children }: SidebarProps) {
                     : "text-zinc-600 hover:bg-zinc-200/50",
                 )}
               >
-                <Home className="w-4 h-4 shrink-0" />
+                <Icons.home className="h-5 w-5" />
                 <span>Dashboard</span>
               </Link>
               <Link
@@ -79,7 +79,7 @@ export function Sidebar({ children }: SidebarProps) {
                     : "text-zinc-600 hover:bg-zinc-200/50",
                 )}
               >
-                <MessagesSquare className="w-4 h-4 shrink-0" />
+                <Icons.messagesSquare className="h-5 w-5" />
                 <span>Interactive Chat</span>
               </Link>
               <Link
@@ -91,7 +91,7 @@ export function Sidebar({ children }: SidebarProps) {
                     : "text-zinc-600 hover:bg-zinc-200/50",
                 )}
               >
-                <MessageSquareDot className="w-4 h-4 shrink-0" />
+                <Icons.messageSquareDot className="h-5 w-5" />
                 <span>Live Call</span>
               </Link>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Languages } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { SECTIONS_DATA } from "@/lib/data/sections";
 import { BrowserSTTService } from "@/lib/services/stt/stt-service";
 import { VoiceRecorder } from "@/components/voice/VoiceRecorder";
@@ -232,7 +232,7 @@ export default function Chat() {
             }`}
             title="Toggle Translation Panel"
           >
-            <Languages className="h-5 w-5" />
+            <Icons.languages className="h-5 w-5" />
           </button>
         </div>
 
@@ -298,7 +298,7 @@ export default function Chat() {
                 disabled={isLoading}
                 className="p-3 bg-teal-500 hover:bg-teal-600 text-white rounded-full transition-all transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
               >
-                <Send className="h-5 w-5" />
+                <Icons.send className="h-5 w-5" />
               </button>
             )}
           </div>

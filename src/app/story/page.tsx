@@ -1,18 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
-import {
-  ChevronDown,
-  ChevronUp,
-  MapPin,
-  Backpack,
-  Lock,
-  Plane,
-  Hotel,
-  Coffee,
-  Car,
-  ShoppingBag,
-} from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePaywall } from "@/hooks/use-paywall";
@@ -68,7 +57,7 @@ export default function Page() {
       description:
         "Start your journey at the international airport terminal, where our store representative will greet you.",
       location: "Terminal 3, International Arrivals",
-      icon: <Plane />,
+      icon: <Icons.travel />,
       isOpen: true,
       type: "airport",
       isLocked: true,
@@ -80,7 +69,7 @@ export default function Page() {
       description:
         "Experience luxury accommodation at our partner five-star hotel.",
       location: "Grand Plaza Hotel",
-      icon: <Hotel />,
+      icon: <Icons.building />,
       isOpen: false,
       type: "hotel",
       isLocked: true,
@@ -92,7 +81,7 @@ export default function Page() {
       description:
         "Enjoy a complimentary breakfast while reviewing your itinerary.",
       location: "Hotel Restaurant",
-      icon: <Coffee />,
+      icon: <Icons.restaurant />,
       isOpen: false,
       type: "breakfast",
       isLocked: true,
@@ -103,7 +92,7 @@ export default function Page() {
       title: "City Tour",
       description: "Explore the city highlights with our professional guide.",
       location: "Downtown Area",
-      icon: <Car />,
+      icon: <Icons.car />,
       isOpen: false,
       type: "citytour",
       isLocked: true,
@@ -114,7 +103,7 @@ export default function Page() {
       title: "Shopping Experience",
       description: "Visit exclusive boutiques and shopping districts.",
       location: "Fashion District",
-      icon: <ShoppingBag />,
+      icon: <Icons.shopping />,
       isOpen: false,
       type: "shopping",
       isLocked: true,
@@ -136,7 +125,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto">
               {/* Display Tag */}
               <div className="flex items-center justify-center gap-3 py-10">
-                <Backpack className="w-8 h-8 text-yellow-400" />
+                <Icons.backpack className="w-8 h-8 text-yellow-400" />
                 <span className="text-2xl font-bold text-gray-900 tracking-wide">
                   American Journey
                 </span>
@@ -158,7 +147,7 @@ export default function Page() {
                           className={`p-3 rounded-xl ${episode.isLocked ? "bg-gray-100" : episode.color}`}
                         >
                           {episode.isLocked ? (
-                            <Lock className="w-6 h-6 text-gray-400" />
+                            <Icons.lock className="w-6 h-6 text-gray-400" />
                           ) : (
                             <div className="w-6 h-6">{episode.icon}</div>
                           )}
@@ -172,7 +161,7 @@ export default function Page() {
                           <div
                             className={`flex items-center text-sm ${episode.isLocked ? "text-gray-400" : "text-gray-500"}`}
                           >
-                            <MapPin className="w-4 h-4 mr-1" />
+                            <Icons.mapPin className="w-4 h-4 mr-1" />
                             {episode.location}
                           </div>
                         </div>
@@ -180,9 +169,9 @@ export default function Page() {
                       {!episode.isLocked && (
                         <div className={episode.color}>
                           {episode.isOpen ? (
-                            <ChevronUp className="w-5 h-5" />
+                            <Icons.chevronUp className="w-5 h-5" />
                           ) : (
-                            <ChevronDown className="w-5 h-5" />
+                            <Icons.chevronDown className="w-5 h-5" />
                           )}
                         </div>
                       )}

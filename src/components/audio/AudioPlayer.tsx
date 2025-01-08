@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Play, PauseCircle } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { TTSService } from "@/lib/services/tts/tts-service";
 
 interface AudioPlayerProps {
@@ -45,9 +45,9 @@ export function AudioPlayer({
         isPlaying ? "bg-blue-500" : "bg-blue-100"
       } ${className}`}>
       {isPlaying ? (
-        <PauseCircle className="h-4 w-4 text-white" />
+        <Icons.pauseCircle className="h-5 w-5" />
       ) : (
-        <Play className="h-4 w-4 text-blue-600" />
+        <Icons.play className="h-5 w-5" />
       )}
     </button>
   );

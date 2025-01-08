@@ -1,5 +1,4 @@
 "use client";
-import { useProStore } from "@/store/proStore";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Lock } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 
 interface PaywallModalProps {
   onClose?: () => void;
@@ -25,7 +24,7 @@ export function PaywallModal({ onClose }: PaywallModalProps) {
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-blue-500" />
+            <Icons.lock className="h-5 w-5" />
             <CardTitle>Upgrade to Pro</CardTitle>
           </div>
           <CardDescription>
@@ -61,9 +60,7 @@ export function PaywallModal({ onClose }: PaywallModalProps) {
           <Button variant="outline" onClick={onClose}>
             Maybe Later
           </Button>
-          <Button onClick={handleUpgrade}>
-            Upgrade Now
-          </Button>
+          <Button onClick={handleUpgrade}>Upgrade Now</Button>
         </CardFooter>
       </Card>
     </div>

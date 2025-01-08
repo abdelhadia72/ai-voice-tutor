@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Globe, BookOpen, ArrowLeft } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 
 const nativeLanguages = [
   { code: "ar", name: "Arabic", flag: "🇲🇦" },
@@ -91,7 +91,7 @@ export function Onboarding() {
           {step === 2 && (
             <div className="space-y-4">
               <h3 className="text-xl font-semibold flex items-center text-teal-800">
-                <Globe className="mr-2 text-yellow-500" /> What's your native
+                <Icons.globe className="h-5 w-5" /> What's your native
                 language?
               </h3>
               <Select
@@ -117,7 +117,7 @@ export function Onboarding() {
           {step === 3 && (
             <div className="space-y-4">
               <h3 className="text-xl font-semibold flex items-center text-teal-800">
-                <BookOpen className="mr-2 text-green-500" /> What language do
+                <Icons.book className="h-5 w-5" /> What language do
                 you want to learn?
               </h3>
               <Select
@@ -147,7 +147,7 @@ export function Onboarding() {
                 variant="outline"
                 className="text-teal-800 border-teal-800"
               >
-                <ArrowLeft className="mr-2" /> Back
+                <Icons.arrowLeft className="h-5 w-5" /> Back
               </Button>
             )}
             <Button

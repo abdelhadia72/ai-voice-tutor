@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Mic, Square } from "lucide-react";
+import { Icons } from "@/lib/data/icons";
 import { STTService } from "@/lib/services/stt/stt-service";
 
 interface VoiceRecorderProps {
@@ -104,9 +104,9 @@ export function VoiceRecorder({
       } text-white`}
     >
       {isRecording ? (
-        <Square className="h-5 w-5" />
+        <Icons.square className="h-5 w-5" />
       ) : (
-        <Mic className="h-5 w-5" />
+        <Icons.mic className="h-5 w-5" />
       )}
     </button>
   );
