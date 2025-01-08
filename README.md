@@ -55,7 +55,7 @@ yarn dev
 ## 👥 Team
 
 - [Abdelhadi Bousaadah](https://github.com/abdelhadia72)
-- [Ayoub Bigharassine](https://github.com/ayouub7)
+- [Ayoub Bigharassine](https://github.com/ayyyub777)
 
 ---
 

@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       message: response,
     });
-  } catch (error: Error | unknown) {
+  } catch (error: unknown) {
     console.log("Error in chat", error);
     return NextResponse.json(
       {

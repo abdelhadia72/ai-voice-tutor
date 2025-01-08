@@ -15,12 +15,16 @@ interface TranslationContextType {
   addTranslation: (text: string, translation: string) => void;
 }
 
-export const MessageBubble = ({
-  message,
-  translationContext,
-}: {
+interface MessageBubbleProps {
   message: Message;
+  isLast?: boolean;
   translationContext?: TranslationContextType;
+}
+
+export const MessageBubble: React.FC<MessageBubbleProps> = ({
+  message,
+  isLast = false,
+  translationContext,
 }) => {
   const isUser = message.role === "user";
   const [isTranslating, setIsTranslating] = useState(false);

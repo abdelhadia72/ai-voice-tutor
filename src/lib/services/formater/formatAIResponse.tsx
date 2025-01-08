@@ -1,3 +1,4 @@
+import * as React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -6,6 +7,8 @@ import "highlight.js/styles/github-dark.css";
 interface MarkdownComponentsProps {
   children: React.ReactNode;
   className?: string;
+  node?: any;
+  inline?: boolean;
   [key: string]: any;
 }
 
@@ -46,15 +49,14 @@ const markdownComponents = {
   // Add more custom components as needed
 };
 
-export const formatAIResponse = (content: string) => {
+export const formatAIResponse = (text: string): React.ReactElement => {
   return (
     <ReactMarkdown
-      className="prose prose-invert max-w-none"
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeHighlight]}
       components={markdownComponents}
     >
-      {content}
+      {text}
     </ReactMarkdown>
   );
 };
