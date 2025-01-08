@@ -62,7 +62,7 @@ export function Sidebar({ children }: SidebarProps) {
                 href="/"
                 className={cn(
                   "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors text-sm",
-                  pathname === "/"
+                  pathname === "/dashboard"
                     ? "bg-teal-600 text-zinc-50"
                     : "text-zinc-600 hover:bg-zinc-200/50",
                 )}

@@ -173,10 +173,7 @@ export const MessageBubble = ({
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <h3 className="font-medium text-gray-100">Maxwell Anderson</h3>
-                <span className="text-xs font-light text-blue-200">
-                  AI Assistant
-                </span>
+                <span className="text-blue-200">AI Assistant</span>
               </div>
               <div className="flex items-center gap-2">
                 <button
