@@ -16,12 +16,8 @@ interface Message {
 }
 
 interface Translation {
-  languageFrom: string;
-  languageTo: string;
-  text: string;
+  original: string;
   translation: string;
-  audioIdFrom: string;
-  audioIdTo: string;
 }
 
 // Initialize sttService only in browser environment (client side)
@@ -158,23 +154,14 @@ export default function Chat() {
     }
   };
 
-  const addTranslation = (text: string, translation: string) => {
+  const addTranslation = (original: string, translation: string) => {
     setTranslations((prev) => {
-      const exists = prev.some((t) => t.text === text);
+      const exists = prev.some((t) => t.original === original);
       if (exists) {
         return prev;
       }
 
-      const newTranslation: Translation = {
-        languageFrom: "English",
-        languageTo: "Arabic",
-        text,
-        translation,
-        audioIdFrom: `english_${Date.now()}`,
-        audioIdTo: `arabic_${Date.now()}`,
-      };
-
-      return [newTranslation, ...prev];
+      return [{ original, translation }, ...prev];
     });
 
     setIsSidebarOpen(true);
