@@ -114,7 +114,7 @@ export const MessageBubble = ({
                   <button
                     onClick={handleTranslate}
                     disabled={isTranslating}
-                    className="p-1.5 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
+                    className="p-2 bg-blue-500 hover:bg-blue-600 rounded-full transition-colors disabled:opacity-50"
                     title={`Translate to ${nativeLanguage.toUpperCase()}`}
                   >
                     <Languages className="h-4 w-4 text-white" />
