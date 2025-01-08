@@ -1,5 +1,5 @@
 "use client";
-import { Bot, User, Languages, Play, Pause } from "lucide-react";
+import { Bot, User, Languages, Play, Pause, Loader2 } from "lucide-react";
 import { RecordedAudioPlayer } from "./RecordedAudioPlayer";
 import { formatAIResponse } from "@/lib/services/formater/formatAIResponse";
 import { useState, useRef, useEffect } from "react";
@@ -25,6 +25,7 @@ export const MessageBubble = ({
   const isUser = message.role === "user";
   const [isTranslating, setIsTranslating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { nativeLanguage } = useUserPreferences();
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -64,6 +65,7 @@ export const MessageBubble = ({
     }
 
     try {
+      setIsLoadingAudio(true);
       if (!audioUrl) {
         const response = await fetch("/api/openai-tts", {
           method: "POST",
@@ -72,7 +74,7 @@ export const MessageBubble = ({
           },
           body: JSON.stringify({
             text: message.parts[0],
-            voice: "alloy", // You can customize this based on preferences
+            voice: "alloy",
           }),
         });
 
@@ -89,13 +91,22 @@ export const MessageBubble = ({
       }
 
       if (audioRef.current) {
-        audioRef.current.play();
+        await audioRef.current.play();
         setIsPlaying(true);
       }
     } catch (error) {
       console.error("Failed to play audio:", error);
+    } finally {
+      setIsLoadingAudio(false);
     }
   };
+
+  // Auto-play for AI responses
+  useEffect(() => {
+    if (!isUser && message.parts[0]) {
+      handlePlayAudio();
+    }
+  }, [message.parts[0], isUser]);
 
   useEffect(() => {
     return () => {
@@ -152,9 +163,12 @@ export const MessageBubble = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePlayAudio}
-                  className="p-2 bg-blue-500 hover:bg-blue-500/50 rounded-full transition-colors"
+                  disabled={isLoadingAudio}
+                  className="p-2 bg-blue-500 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
                 >
-                  {isPlaying ? (
+                  {isLoadingAudio ? (
+                    <Loader2 className="h-4 w-4 text-white animate-spin" />
+                  ) : isPlaying ? (
                     <Pause className="h-4 w-4 text-white" />
                   ) : (
                     <Play className="h-4 w-4 text-white" />
@@ -167,7 +181,11 @@ export const MessageBubble = ({
                     className="p-2 bg-blue-500 hover:bg-blue-500/50 rounded-full transition-colors disabled:opacity-50"
                     title={`Translate to ${nativeLanguage.toUpperCase()}`}
                   >
-                    <Languages className="h-4 w-4 text-white" />
+                    {isTranslating ? (
+                      <Loader2 className="h-4 w-4 text-white animate-spin" />
+                    ) : (
+                      <Languages className="h-4 w-4 text-white" />
+                    )}
                   </button>
                 )}
               </div>

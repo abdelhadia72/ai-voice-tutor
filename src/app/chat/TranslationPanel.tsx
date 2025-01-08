@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserPreferences } from "@/store/userPreferences";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Loader2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const languages = {
@@ -30,6 +30,7 @@ interface AudioCache {
 export default function TranslationPanel({ translations, toggle, updateToggle }: TranslationPanelProps) {
   const { targetLanguage, nativeLanguage } = useUserPreferences();
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioCache, setAudioCache] = useState<AudioCache>({});
 
@@ -45,6 +46,7 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
     }
 
     try {
+      setLoadingId(id);
       let audioUrl = audioCache[id];
 
       if (!audioUrl) {
@@ -55,7 +57,7 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
           },
           body: JSON.stringify({
             text,
-            voice: "alloy", // You can customize this based on language
+            voice: "alloy",
           }),
         });
 
@@ -74,11 +76,13 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
           audioRef.current.src = audioUrl;
         }
         
-        audioRef.current.play();
+        await audioRef.current.play();
         setPlayingId(id);
       }
     } catch (error) {
       console.error("Failed to play audio:", error);
+    } finally {
+      setLoadingId(null);
     }
   };
 
@@ -118,9 +122,12 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
                 </div>
                 <button
                   onClick={() => handlePlay(item.original, `orig-${index}`)}
-                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                  disabled={loadingId === `orig-${index}`}
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
                 >
-                  {playingId === `orig-${index}` ? (
+                  {loadingId === `orig-${index}` ? (
+                    <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />
+                  ) : playingId === `orig-${index}` ? (
                     <Pause className="h-4 w-4 text-blue-500" />
                   ) : (
                     <Play className="h-4 w-4 text-blue-500" />
@@ -141,9 +148,12 @@ export default function TranslationPanel({ translations, toggle, updateToggle }:
                 </div>
                 <button
                   onClick={() => handlePlay(item.translation, `trans-${index}`)}
-                  className="p-1.5 hover:bg-teal-100 rounded-full transition-colors"
+                  disabled={loadingId === `trans-${index}`}
+                  className="p-1.5 hover:bg-teal-100 rounded-full transition-colors disabled:opacity-50"
                 >
-                  {playingId === `trans-${index}` ? (
+                  {loadingId === `trans-${index}` ? (
+                    <Loader2 className="h-4 w-4 text-teal-500 animate-spin" />
+                  ) : playingId === `trans-${index}` ? (
                     <Pause className="h-4 w-4 text-teal-500" />
                   ) : (
                     <Play className="h-4 w-4 text-teal-500" />
